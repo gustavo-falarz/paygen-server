@@ -4,10 +4,7 @@ import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
 import com.gfbdev.session.ProviderSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/provider")
@@ -19,6 +16,11 @@ public class ProviderController {
     @Autowired
     public ProviderController(ProviderSession providerSession) {
         this.providerSession = providerSession;
+    }
+
+    @GetMapping
+    public Response findAll(){
+        return providerSession.findAll();
     }
 
     @RequestMapping("/addProvider")
