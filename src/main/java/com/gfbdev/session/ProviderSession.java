@@ -48,4 +48,13 @@ public class ProviderSession {
             return Response.error(e.getMessage());
         }
     }
+
+    public Response findAll() {
+        try {
+            return Response.ok(repository.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
 }
