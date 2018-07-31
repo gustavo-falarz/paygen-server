@@ -30,6 +30,8 @@ public class LobbySession {
         try {
             Response providerResponse = providerSession.findProvider(providerId);
             Response customerResponse = customerSession.findCustomer(userID);
+
+
             if (!providerResponse.status) {
                 return providerResponse;
             }
@@ -40,7 +42,12 @@ public class LobbySession {
             Customer customer = (Customer) customerResponse.data;
             Provider provider = (Provider) providerResponse.data;
 
+            if (provider.getLobby().getCustomerList().contains(customer)) {
+                return Response.error("Usuário já está no estabelecimento");
+            }
+
             provider.getLobby().getCustomerList().add(customer);
+            providerRepository.save(provider);
             return Response.ok("Checkin realizado com sucesso");
 
         } catch (Exception e) {
@@ -63,8 +70,14 @@ public class LobbySession {
 
             Customer customer = (Customer) customerResponse.data;
             Provider provider = (Provider) providerResponse.data;
+
+            if (!provider.getLobby().getCustomerList().contains(customer)) {
+                return Response.error("Usuário já saiu do estabelecimento");
+            }
+
             provider.getLobby().getCustomerList().remove(customer);
-            return Response.ok("Checkin realizado com sucesso");
+            providerRepository.save(provider);
+            return Response.ok("Checkout realizado com sucesso");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,7 +88,7 @@ public class LobbySession {
     public Response getCustomers(String providerId) {
         try {
             Response responseProvider = providerSession.findProvider(providerId);
-            if (responseProvider.status) {
+            if (!responseProvider.status) {
                 return responseProvider;
             }
             Provider provider = (Provider) responseProvider.data;

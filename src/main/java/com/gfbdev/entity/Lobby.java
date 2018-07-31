@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Lobby {
 
-    List<Customer> customerList;
+    private List<Customer> customerList;
 
     public List<Customer> getCustomerList() {
         return customerList;

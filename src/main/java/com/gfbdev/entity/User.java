@@ -3,6 +3,8 @@ package com.gfbdev.entity;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Objects;
+
 /**
  * Created by Headtrap on 28/08/2017.
  */
@@ -47,5 +49,19 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

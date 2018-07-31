@@ -30,8 +30,8 @@ public class LobbyController {
         return lobbySession.checkOut(userId, providerId);
     }
 
-    @GetMapping("/getCustomers")
-    public Response getCustomers(String providerId) {
+    @GetMapping("/getCustomer/{providerId}")
+    public Response getCustomers(@PathVariable String providerId) {
         return lobbySession.getCustomers(providerId);
     }
 }
