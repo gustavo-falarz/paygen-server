@@ -11,8 +11,6 @@ public class Response<T> {
     public String message;
     public T data;
 
-    private static Response response;
-
 
     public static Response error(String erro) {
         Response r = getInstance();
@@ -27,6 +25,7 @@ public class Response<T> {
         r.setData(o);
         return r;
     }
+
     public static Response ok(String message) {
         Response r = getInstance();
         r.setStatus(true);
@@ -35,14 +34,8 @@ public class Response<T> {
     }
 
 
-    public static Response getInstance(){
-        if(response == null){
-            response = new Response();
-        }
-        response.setData(null);
-        response.setMessage(null);
-        response.setStatus(false);
-        return response;
+    public static Response getInstance() {
+        return new Response();
     }
 
     public boolean getStatus() {
@@ -69,11 +62,4 @@ public class Response<T> {
         this.data = data;
     }
 
-    public static Response getResponse() {
-        return response;
-    }
-
-    public static void setResponse(Response response) {
-        Response.response = response;
-    }
 }
