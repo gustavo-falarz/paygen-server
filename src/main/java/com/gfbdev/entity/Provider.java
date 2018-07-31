@@ -1,7 +1,6 @@
 package com.gfbdev.entity;
 
 
-
 import org.springframework.data.geo.Point;
 
 import java.util.List;
@@ -24,56 +23,14 @@ public class Provider extends User {
 
     private Status status;
 
-    private String banner;
+    private ProviderInfo info;
 
-    private Type type;
-
-    public Status getStatus() {
-        return status;
+    public ProviderInfo getInfo() {
+        return info;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
-    public List<User> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<User> employees) {
-        this.employees = employees;
-    }
-
-    public String getBanner() {
-        return banner;
-    }
-
-    public void setBanner(String banner) {
-        this.banner = banner;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public List<Transaction> getSales() {
-        return sales;
-    }
-
-    public void setSales(List<Transaction> sales) {
-        this.sales = sales;
+    public void setInfo(ProviderInfo info) {
+        this.info = info;
     }
 
     public Lobby getLobby() {
@@ -84,6 +41,14 @@ public class Provider extends User {
         this.lobby = lobby;
     }
 
+    public List<Transaction> getSales() {
+        return sales;
+    }
+
+    public void setSales(List<Transaction> sales) {
+        this.sales = sales;
+    }
+
     public List<Consumption> getConsumptions() {
         return consumptions;
     }
@@ -92,14 +57,33 @@ public class Provider extends User {
         this.consumptions = consumptions;
     }
 
-    public enum Status{
+    public List<User> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<User> employees) {
+        this.employees = employees;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
         PENDING,
         ACTIVE
     }
 
-    public enum Type{
-        RESTAURANT,
-        HAMBURGUER,
-        PIZZA
-    }
 }
