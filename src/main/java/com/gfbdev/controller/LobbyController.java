@@ -5,9 +5,11 @@ import com.gfbdev.session.LobbySession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/lobby")
+@RestController
+@RequestMapping("/lobby")
 public class LobbyController {
 
     private final
@@ -23,7 +25,7 @@ public class LobbyController {
         return lobbySession.checkIn(userId, providerId);
     }
 
-    @GetMapping("/checkOut/{userId}/{providerId}")
+    @RequestMapping("/checkOut/{userId}/{providerId}")
     public Response checkout(@PathVariable String userId, @PathVariable String providerId) {
         return lobbySession.checkOut(userId, providerId);
     }
