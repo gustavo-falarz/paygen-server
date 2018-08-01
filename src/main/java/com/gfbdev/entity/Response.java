@@ -30,6 +30,7 @@ public class Response<T> {
         Response r = getInstance();
         r.setStatus(true);
         r.setMessage(message);
+        r.setData(message);
         return r;
     }
 
