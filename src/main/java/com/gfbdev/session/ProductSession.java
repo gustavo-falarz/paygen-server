@@ -26,7 +26,7 @@ public class ProductSession {
 
     public Response findProduct(Product product) {
         try {
-            return Response.ok(repository.findByName(product.getName()));
+            return Response.ok(repository.findByName(product.getDescription()));
         } catch (Exception e) {
             return Response.error("Problemas ao localizar produto");
         }

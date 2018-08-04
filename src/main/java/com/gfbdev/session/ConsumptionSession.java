@@ -2,6 +2,7 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.Consumption;
+import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.dto.ConsumptionDTO;
@@ -56,20 +57,21 @@ public class ConsumptionSession {
         }
     }
 
-    public Response getConsumption(ConsumptionDTO dto) {
+    public Response getConsumption(String customerId, String providerId) {
         try {
-            Response responseCustomer = customerSession.findCustomer(dto.getCustomer().getId());
+            Response responseCustomer = customerSession.findCustomer(customerId);
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
-            Response responseProvider = customerSession.findCustomer(dto.getCustomer().getId());
+            Response responseProvider = customerSession.findCustomer(providerId);
             if (!responseCustomer.status) {
                 return responseProvider;
             }
 
             Provider provider = (Provider) responseProvider.getData();
+            Customer customer = (Customer) responseCustomer.getData();
             for (Consumption c : provider.getConsumptions()) {
-                if (c.getCustomer().equals(dto.getCustomer())) {
+                if (c.getCustomer().equals(customer)) {
                     return Response.ok(c);
                 }
             }
@@ -91,7 +93,7 @@ public class ConsumptionSession {
                 return responseProvider;
             }
 
-            Response responseConsumption = getConsumption(dto);
+            Response responseConsumption = getConsumption(dto.getCustomer().getId(), dto.getProvider().getId());
             if (!responseConsumption.status) {
                 return responseConsumption;
             }
@@ -116,7 +118,7 @@ public class ConsumptionSession {
                 return responseProvider;
             }
 
-            Response responseConsumption = getConsumption(dto);
+            Response responseConsumption = getConsumption(dto.getCustomer().getId(), dto.getProvider().getId());
             if (!responseConsumption.status) {
                 return responseConsumption;
             }
