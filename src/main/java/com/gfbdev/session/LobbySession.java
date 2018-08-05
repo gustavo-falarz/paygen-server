@@ -60,7 +60,7 @@ public class LobbySession {
             provider.getLobby().getCustomerList().add(customer);
             providerRepository.save(provider);
 
-            customer.setCheckedIn(provider);
+            customer.setCheckedIn(provider.getId());
             customerRepository.save(customer);
             return Response.ok(getInstance().getString("messages.info.user-checked-in"));
 

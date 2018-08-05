@@ -15,7 +15,7 @@ public class Customer extends User {
 
     private Status status;
 
-    private Provider checkedIn;
+    private String checkedIn;
 
     public Status getStatus() {
         return status;
@@ -41,11 +41,11 @@ public class Customer extends User {
         this.cpf = cpf;
     }
 
-    public Provider getCheckedIn() {
+    public String getCheckedIn() {
         return checkedIn;
     }
 
-    public void setCheckedIn(Provider checkedIn) {
+    public void setCheckedIn(String checkedIn) {
         this.checkedIn = checkedIn;
     }
 

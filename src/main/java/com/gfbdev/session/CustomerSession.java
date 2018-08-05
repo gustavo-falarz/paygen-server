@@ -49,7 +49,7 @@ public class CustomerSession {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.error("messages.error.problems-searching-user");
+            return Response.error(e.getMessage());
         }
     }
 
