@@ -33,22 +33,11 @@ public class ConsumptionSession {
     }
 
 
-    public Response addConsumption(ConsumptionDTO dto) {
+    public Response addConsumption(Customer customer, Provider provider) {
         try {
-            Response responseCustomer = customerSession.findCustomer(dto.getCustomer().getId());
-            if (!responseCustomer.status) {
-                return responseCustomer;
-            }
-            Response responseProvider = customerSession.findCustomer(dto.getCustomer().getId());
-            if (!responseCustomer.status) {
-                return responseProvider;
-            }
             Consumption consumption = new Consumption();
-            consumption.setItems(dto.getItems());
-            consumption.setCustomer(dto.getCustomer());
             consumption.setItems(new ArrayList<>());
-
-            Provider provider = (Provider) responseProvider.getData();
+            consumption.setCustomer(customer);
             provider.getConsumptions().add(consumption);
             return Response.ok(providerRepository.save(provider));
         } catch (Exception e) {
@@ -63,8 +52,8 @@ public class ConsumptionSession {
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
-            Response responseProvider = customerSession.findCustomer(providerId);
-            if (!responseCustomer.status) {
+            Response responseProvider = providerSession.findProvider(providerId);
+            if (!responseProvider.status) {
                 return responseProvider;
             }
 
