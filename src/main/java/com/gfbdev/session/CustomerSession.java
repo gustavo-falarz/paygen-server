@@ -9,6 +9,7 @@ import com.gfbdev.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.gfbdev.Messages.*;
 import static com.gfbdev.service.EmailService.sendEmailNewUser;
 
 /**
@@ -25,7 +26,7 @@ public class CustomerSession {
         try {
             Customer existingCustomer = repository.findOne(customer.getEmail());
             if (existingCustomer != null) {
-                return Response.error(Messages.getInstance().getString("messages.error.provider-already-registered"));
+                return Response.error(getInstance().getString("messages.error.provider-already-registered"));
             }
             customer.setStatus(Customer.Status.PENDING);
             customer.setPassword(StringUtils.generateRandomCode());
@@ -34,7 +35,7 @@ public class CustomerSession {
             return Response.ok(repository.save(customer));
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.error(Messages.getInstance().getString("messages.error.provider-problems-saving-user"));
+            return Response.error(getInstance().getString("messages.error.provider-problems-saving-user"));
         }
     }
 
@@ -42,7 +43,7 @@ public class CustomerSession {
         try {
             Customer customer = repository.findOne(userId);
             if (customer == null) {
-                return Response.error(Messages.getInstance().getString("messages.error.customer-not-found"));
+                return Response.error(getInstance().getString("messages.error.customer-not-found"));
             } else {
                 return Response.ok(customer);
             }
@@ -74,5 +75,22 @@ public class CustomerSession {
         }
     }
 
-    //TODO Change password
+    public Response checkReception(String customerId) {
+        try {
+            Response customerResponse = findCustomer(customerId);
+            if (!customerResponse.status) {
+                return Response.error(getInstance().getString("messages.error.customer-not-found"));
+            }
+
+            Customer customer = (Customer) customerResponse.data;
+            if (customer.getCheckedIn() == null) {
+                return Response.ok(false);
+            }
+            return Response.ok(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
 }

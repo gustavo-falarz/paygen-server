@@ -35,13 +35,18 @@ public class CustomerController {
     }
 
     @RequestMapping("/updateCustomer")
-    public Response updateCustomer(@RequestBody Customer customer){
+    public Response updateCustomer(@RequestBody Customer customer) {
         return session.updateCustomer(customer);
     }
 
     @RequestMapping("/listAllCustomers")
-    public Response listAllCustomers(){
-       return session.listAllCustomers();
+    public Response listAllCustomers() {
+        return session.listAllCustomers();
+    }
+
+    @RequestMapping("/checkReception/{customerId}")
+    public Response checkReception(@PathVariable String customerId) {
+        return session.checkReception(customerId);
     }
 
 }
