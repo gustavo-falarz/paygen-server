@@ -4,6 +4,7 @@ import com.gfbdev.entity.Consumption;
 import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
+import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import static com.gfbdev.Messages.getInstance;
 public class LobbySession {
     private final ProviderRepository providerRepository;
 
+    private final CustomerRepository customerRepository;
+
     private final ConsumptionSession consumptionSession;
 
     private final ProviderSession providerSession;
@@ -21,8 +24,9 @@ public class LobbySession {
     private final CustomerSession customerSession;
 
     @Autowired
-    public LobbySession(ProviderRepository providerRepository, ConsumptionSession consumptionSession, ProviderSession providerSession, CustomerSession customerSession) {
+    public LobbySession(ProviderRepository providerRepository, CustomerRepository customerRepository, ConsumptionSession consumptionSession, ProviderSession providerSession, CustomerSession customerSession) {
         this.providerRepository = providerRepository;
+        this.customerRepository = customerRepository;
         this.consumptionSession = consumptionSession;
         this.providerSession = providerSession;
         this.customerSession = customerSession;
@@ -55,6 +59,9 @@ public class LobbySession {
 
             provider.getLobby().getCustomerList().add(customer);
             providerRepository.save(provider);
+
+            customer.setCheckedIn(provider.getId());
+            customerRepository.save(customer);
             return Response.ok(getInstance().getString("messages.info.user-checked-in"));
 
         } catch (Exception e) {
@@ -93,6 +100,10 @@ public class LobbySession {
             provider.getLobby().getCustomerList().remove(customer);
             provider.getConsumptions().remove(consumption);
             providerRepository.save(provider);
+
+            customer.setCheckedIn(null);
+            customerRepository.save(customer);
+
             return Response.ok(getInstance().getString("messages.info.user-checked-out"));
 
         } catch (Exception e) {

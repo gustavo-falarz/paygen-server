@@ -13,9 +13,9 @@ public class Customer extends User {
 
     private List<Transaction> purchases;
 
-    private List<Consumption> consumption;
-
     private Status status;
+
+    private String checkedIn;
 
     public Status getStatus() {
         return status;
@@ -23,14 +23,6 @@ public class Customer extends User {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public List<Consumption> getConsumption() {
-        return consumption;
-    }
-
-    public void setConsumption(List<Consumption> consumption) {
-        this.consumption = consumption;
     }
 
     public List<Transaction> getPurchases() {
@@ -47,6 +39,14 @@ public class Customer extends User {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(String checkedIn) {
+        this.checkedIn = checkedIn;
     }
 
     public enum Status{
