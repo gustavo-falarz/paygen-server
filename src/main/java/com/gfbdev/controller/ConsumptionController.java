@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/comsuption")
+@RequestMapping("/consumption")
 public class ConsumptionController {
 
     private final
@@ -27,7 +27,7 @@ public class ConsumptionController {
         return session.getConsumption(userId, providerId);
     }
 
-    @RequestMapping("/additem")
+    @RequestMapping("/addItem")
     public Response additem(@RequestBody ConsumptionDTO dto) {
         return session.addItem(dto);
     }
