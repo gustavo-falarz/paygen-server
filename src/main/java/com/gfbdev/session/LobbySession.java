@@ -4,6 +4,7 @@ import com.gfbdev.entity.Consumption;
 import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
+import com.gfbdev.entity.dto.CheckedIn;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +54,14 @@ public class LobbySession {
             }
 
             Response responseConsumption = consumptionSession.addConsumption(customer, provider);
-            if (!responseConsumption.status){
+            if (!responseConsumption.status) {
                 return Response.error(getInstance().getString("messages.error.problems-adding-consumption"));
             }
 
             provider.getLobby().getCustomerList().add(customer);
             providerRepository.save(provider);
 
-            customer.setCheckedIn(provider.getId());
+            customer.setCheckedIn(new CheckedIn(provider.getId(), provider.getName()));
             customerRepository.save(customer);
             return Response.ok(getInstance().getString("messages.info.user-checked-in"));
 
@@ -90,11 +91,11 @@ public class LobbySession {
             }
 
             Response responseConsumption = consumptionSession.getConsumption(userID, providerId);
-            if (!responseConsumption.status){
+            if (!responseConsumption.status) {
                 return Response.error(getInstance().getString("messages.error.problems-finding-consumption"));
             }
             Consumption consumption = (Consumption) responseConsumption.data;
-            if (consumption.getItems().size() != 0){
+            if (consumption.getItems().size() != 0) {
                 return Response.error(getInstance().getString("messages.error.problems-deleting-consumption"));
             }
             provider.getLobby().getCustomerList().remove(customer);
