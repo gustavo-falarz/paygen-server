@@ -77,7 +77,7 @@ public class ConsumptionSession {
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
-            Response responseProvider = customerSession.findCustomer(dto.getCustomer().getId());
+            Response responseProvider = providerSession.findProvider(dto.getProvider().getId());
             if (!responseProvider.status) {
                 return responseProvider;
             }
@@ -86,9 +86,14 @@ public class ConsumptionSession {
             if (!responseConsumption.status) {
                 return responseConsumption;
             }
-
+            Provider provider = (Provider) responseProvider.data;
             Consumption consumption = (Consumption) responseConsumption.getData();
-            consumption.getItems().addAll(dto.getItems());
+
+            provider.getConsumptions().get(provider.getConsumptions().indexOf(consumption))
+                    .getItems()
+                    .addAll(dto.getItems());
+
+            providerRepository.save(provider);
             return Response.ok(Messages.getInstance().getString("messages.info.item-added"));
         } catch (Exception e) {
             e.printStackTrace();
