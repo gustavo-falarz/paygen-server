@@ -1,6 +1,5 @@
 package com.gfbdev.repository;
 
-import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -9,5 +8,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface ProductRepository extends MongoRepository<Product, String> {
 
-    Product findByName(String name);
+    Product findByDescription(String name);
 }

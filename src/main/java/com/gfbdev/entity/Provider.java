@@ -2,6 +2,7 @@ package com.gfbdev.entity;
 
 
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 

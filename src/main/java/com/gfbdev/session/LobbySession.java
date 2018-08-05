@@ -1,27 +1,29 @@
 package com.gfbdev.session;
 
+import com.gfbdev.entity.Consumption;
 import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
-import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import static com.gfbdev.Messages.getInstance;
 
 @Component
 public class LobbySession {
     private final ProviderRepository providerRepository;
 
-    private final CustomerRepository customerRepository;
+    private final ConsumptionSession consumptionSession;
 
     private final ProviderSession providerSession;
 
     private final CustomerSession customerSession;
 
     @Autowired
-    public LobbySession(ProviderRepository providerRepository, CustomerRepository customerRepository, ProviderSession providerSession, CustomerSession customerSession) {
+    public LobbySession(ProviderRepository providerRepository, ConsumptionSession consumptionSession, ProviderSession providerSession, CustomerSession customerSession) {
         this.providerRepository = providerRepository;
-        this.customerRepository = customerRepository;
+        this.consumptionSession = consumptionSession;
         this.providerSession = providerSession;
         this.customerSession = customerSession;
     }
@@ -43,12 +45,17 @@ public class LobbySession {
             Provider provider = (Provider) providerResponse.data;
 
             if (provider.getLobby().getCustomerList().contains(customer)) {
-                return Response.error("Usuário já está no estabelecimento");
+                return Response.error(getInstance().getString("messages.error.user-already-checked-in"));
+            }
+
+            Response responseConsumption = consumptionSession.addConsumption(customer, provider);
+            if (!responseConsumption.status){
+                return Response.error(getInstance().getString("messages.error.problems-adding-consumption"));
             }
 
             provider.getLobby().getCustomerList().add(customer);
             providerRepository.save(provider);
-            return Response.ok("Checkin realizado com sucesso");
+            return Response.ok(getInstance().getString("messages.info.user-checked-in"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,12 +79,21 @@ public class LobbySession {
             Provider provider = (Provider) providerResponse.data;
 
             if (!provider.getLobby().getCustomerList().contains(customer)) {
-                return Response.error("Usuário já saiu do estabelecimento");
+                return Response.error("messages.error.user-not-checked-in");
             }
 
+            Response responseConsumption = consumptionSession.getConsumption(userID, providerId);
+            if (!responseConsumption.status){
+                return Response.error(getInstance().getString("messages.error.problems-finding-consumption"));
+            }
+            Consumption consumption = (Consumption) responseConsumption.data;
+            if (consumption.getItems().size() != 0){
+                return Response.error(getInstance().getString("messages.error.problems-deleting-consumption"));
+            }
             provider.getLobby().getCustomerList().remove(customer);
+            provider.getConsumptions().remove(consumption);
             providerRepository.save(provider);
-            return Response.ok("Checkout realizado com sucesso");
+            return Response.ok(getInstance().getString("messages.info.user-checked-out"));
 
         } catch (Exception e) {
             e.printStackTrace();

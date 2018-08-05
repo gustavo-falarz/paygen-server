@@ -22,12 +22,6 @@ public class ConsumptionController {
         this.session = session;
     }
 
-
-    @RequestMapping("/addConsumption")
-    public Response addConsumption(@RequestBody ConsumptionDTO dto) {
-        return session.addConsumption(dto);
-    }
-
     @RequestMapping("/getConsumption/{userId}/{providerId}")
     public Response getConsumption(@PathVariable("userId") String userId, @PathVariable("providerId") String providerId) {
         return session.getConsumption(userId, providerId);
