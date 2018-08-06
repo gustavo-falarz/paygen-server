@@ -1,6 +1,7 @@
 package com.gfbdev.controller;
 
 import com.gfbdev.entity.Response;
+import com.gfbdev.entity.Transaction;
 import com.gfbdev.entity.dto.TransactioDTO;
 import com.gfbdev.session.TransactionSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class TransactionController {
     }
 
     @RequestMapping("/addTransaction")
-    public Response add(@RequestBody TransactioDTO dto) {
-        return session.add(dto);
+    public Response add(@RequestBody Transaction transaction) {
+        return session.add(transaction);
     }
 
 }

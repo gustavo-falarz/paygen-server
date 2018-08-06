@@ -19,6 +19,26 @@ public class Transaction {
 
     private Status status;
 
+    private String customerId;
+
+    private String providerId;
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
     public Status getStatus() {
         return status;
     }
