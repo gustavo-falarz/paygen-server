@@ -35,11 +35,12 @@ public class TransactionSession {
 
     public Response add(TransactioDTO dto) {
         try {
-            Response responseCustomer = customerSession.findCustomer(dto.getCustomer().getId());
-            Response responseProvider = providerSession.findProvider(dto.getProvider().getId());
+            Response responseCustomer = customerSession.findCustomer(dto.getCustomerId());
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
+
+            Response responseProvider = providerSession.findProvider(dto.getProviderId());
             if (!responseProvider.status) {
                 return responseProvider;
             }

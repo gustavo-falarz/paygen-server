@@ -1,14 +1,12 @@
 package com.gfbdev.entity.dto;
 
-import com.gfbdev.entity.Customer;
-import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Transaction;
 
 public class TransactioDTO {
 
     private Transaction transaction;
-    private Customer customer;
-    private Provider provider;
+    private String customerId;
+    private String providerId;
 
     public Transaction getTransaction() {
         return transaction;
@@ -18,19 +16,19 @@ public class TransactioDTO {
         this.transaction = transaction;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public Provider getProvider() {
-        return provider;
+    public String getProviderId() {
+        return providerId;
     }
 
-    public void setProvider(Provider provider) {
-        this.provider = provider;
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 }
