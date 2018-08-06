@@ -2,6 +2,7 @@ package com.gfbdev.entity;
 
 
 import com.gfbdev.entity.dto.CheckedIn;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Customer extends User {
 
     private String cpf;
 
+    @DBRef
     private List<Transaction> purchases;
 
     private Status status;
