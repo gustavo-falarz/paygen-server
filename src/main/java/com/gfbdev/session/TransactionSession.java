@@ -1,5 +1,6 @@
 package com.gfbdev.session;
 
+import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
 import com.gfbdev.entity.dto.TransactioDTO;
 import com.gfbdev.repository.CustomerRepository;
@@ -33,14 +34,14 @@ public class TransactionSession {
         this.providerRepository = providerRepository;
     }
 
-    public Response add(TransactioDTO dto) {
+    public Response add(Transaction transaction) {
         try {
-            Response responseCustomer = customerSession.findCustomer(dto.getCustomerId());
+            Response responseCustomer = customerSession.findCustomer(transaction.getCustomerId());
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
 
-            Response responseProvider = providerSession.findProvider(dto.getProviderId());
+            Response responseProvider = providerSession.findProvider(transaction.getProviderId());
             if (!responseProvider.status) {
                 return responseProvider;
             }
@@ -48,12 +49,12 @@ public class TransactionSession {
             Customer customer = (Customer) responseCustomer.getData();
             Provider provider = (Provider) responseProvider.getData();
 
-            customer.getPurchases().add(dto.getTransaction());
-            provider.getSales().add(dto.getTransaction());
+            customer.getPurchases().add(transaction);
+            provider.getSales().add(transaction);
 
             customerRepository.save(customer);
             providerRepository.save(provider);
-            return Response.ok("Venda realizada com sucesso.");
+            return Response.ok(Messages.getInstance().getString("messages.success.transaction-saved"));
 
         } catch (Exception e) {
             return Response.error(e.getMessage());

@@ -9,6 +9,8 @@ import com.gfbdev.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 import static com.gfbdev.Messages.*;
 import static com.gfbdev.service.EmailService.sendEmailNewUser;
 
@@ -30,6 +32,7 @@ public class CustomerSession {
             }
             customer.setStatus(Customer.Status.PENDING);
             customer.setPassword(StringUtils.generateRandomCode());
+            customer.setPurchases(new ArrayList<>());
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION, customer.getPassword());
             sendEmailNewUser(customer.getEmail(), message);
             return Response.ok(repository.save(customer));
