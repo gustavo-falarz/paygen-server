@@ -2,9 +2,9 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
-import com.gfbdev.entity.dto.TransactioDTO;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.ProviderRepository;
+import com.gfbdev.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,12 +26,16 @@ public class TransactionSession {
     private final
     ProviderRepository providerRepository;
 
+    private final
+    TransactionRepository transactionRepository;
+
     @Autowired
-    public TransactionSession(CustomerSession customerSession, ProviderSession providerSession, CustomerRepository customerRepository, ProviderRepository providerRepository) {
+    public TransactionSession(CustomerSession customerSession, ProviderSession providerSession, CustomerRepository customerRepository, ProviderRepository providerRepository, TransactionRepository transactionRepository) {
         this.customerSession = customerSession;
         this.providerSession = providerSession;
         this.customerRepository = customerRepository;
         this.providerRepository = providerRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public Response add(Transaction transaction) {
@@ -48,6 +52,8 @@ public class TransactionSession {
 
             Customer customer = (Customer) responseCustomer.getData();
             Provider provider = (Provider) responseProvider.getData();
+
+            transactionRepository.save(transaction);
 
             customer.getPurchases().add(transaction);
             provider.getSales().add(transaction);

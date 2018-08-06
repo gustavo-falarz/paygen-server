@@ -7,7 +7,7 @@ import java.util.List;
 public class Transaction {
 
     @Id
-    private String purchaseId;
+    private String id;
 
     private List<Item> items;
 
@@ -17,7 +17,6 @@ public class Transaction {
 
     private PaymentMethod paymentMethod;
 
-    private Status status;
 
     private String customerId;
 
@@ -39,20 +38,12 @@ public class Transaction {
         this.providerId = providerId;
     }
 
-    public Status getStatus() {
-        return status;
+    public String getId() {
+        return id;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getPurchaseId() {
-        return purchaseId;
-    }
-
-    public void setPurchaseId(String purchaseId) {
-        this.purchaseId = purchaseId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public List<Item> getItems() {
