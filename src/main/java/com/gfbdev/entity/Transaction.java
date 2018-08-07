@@ -15,12 +15,19 @@ public class Transaction {
 
     private double discount;
 
-    private PaymentMethod paymentMethod;
-
+    private Payment payment;
 
     private String customerId;
 
     private String providerId;
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -68,21 +75,6 @@ public class Transaction {
 
     public void setDiscount(double discount) {
         this.discount = discount;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public enum PaymentMethod {
-        CREDIT_CARD,
-        DEBIT,
-        CASH
-
     }
 
     public enum Status {
