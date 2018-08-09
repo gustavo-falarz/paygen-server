@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ConsumptionSession {
@@ -135,7 +136,8 @@ public class ConsumptionSession {
 
             Provider provider = providerRepository.findOne(providerId);
             Consumption consumption = (Consumption) responseConsumption.data;
-            provider.getConsumptions().remove(consumption);
+            List<Consumption> consumptions = provider.getConsumptions();
+            consumptions.get(consumptions.indexOf(consumption)).getItems().clear();
 
             providerRepository.save(provider);
             return Response.ok(Messages.getInstance().getString("messages.success.consumption.removed"));
