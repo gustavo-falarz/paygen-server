@@ -86,7 +86,7 @@ public class CustomerSession {
             }
 
             Customer customer = (Customer) customerResponse.data;
-                return Response.ok(customer.getCheckedIn());
+            return Response.ok(customer.getCheckedIn());
 
         } catch (Exception e) {
             e.printStackTrace();

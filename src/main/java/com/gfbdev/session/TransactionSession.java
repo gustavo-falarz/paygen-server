@@ -24,6 +24,9 @@ public class TransactionSession {
     ProviderSession providerSession;
 
     private final
+    LobbySession lobbySession;
+
+    private final
     CustomerRepository customerRepository;
 
     private final
@@ -33,10 +36,11 @@ public class TransactionSession {
     TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionSession(CustomerSession customerSession, ConsumptionSession consumptionSession, ProviderSession providerSession, CustomerRepository customerRepository, ProviderRepository providerRepository, TransactionRepository transactionRepository) {
+    public TransactionSession(CustomerSession customerSession, ConsumptionSession consumptionSession, ProviderSession providerSession, LobbySession lobbySession, CustomerRepository customerRepository, ProviderRepository providerRepository, TransactionRepository transactionRepository) {
         this.customerSession = customerSession;
         this.consumptionSession = consumptionSession;
         this.providerSession = providerSession;
+        this.lobbySession = lobbySession;
         this.customerRepository = customerRepository;
         this.providerRepository = providerRepository;
         this.transactionRepository = transactionRepository;
@@ -68,6 +72,11 @@ public class TransactionSession {
             Response responseConsumption = consumptionSession.removeConsumption(customer.getId(), provider.getId());
             if (!responseConsumption.status) {
                 return responseConsumption;
+            }
+
+            Response responseCheckout = lobbySession.checkOut(customer.getId(), provider.getId());
+            if (!responseCheckout.status) {
+                return responseCheckout;
             }
 
             return Response.ok(Messages.getInstance().getString("messages.success.transaction-saved"));
