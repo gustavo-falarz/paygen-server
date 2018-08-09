@@ -125,4 +125,23 @@ public class ConsumptionSession {
             return Response.error(e.getMessage());
         }
     }
+
+    public Response removeConsumption(String customerId, String providerId) {
+        try {
+            Response responseConsumption = getConsumption(customerId, providerId);
+            if (!responseConsumption.status) {
+                return responseConsumption;
+            }
+
+            Provider provider = providerRepository.findOne(providerId);
+            Consumption consumption = (Consumption) responseConsumption.data;
+            provider.getConsumptions().remove(consumption);
+
+            providerRepository.save(provider);
+            return Response.ok(Messages.getInstance().getString("messages.success.consumption.removed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
 }
