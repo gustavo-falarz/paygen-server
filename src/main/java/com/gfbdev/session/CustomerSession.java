@@ -2,9 +2,7 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.Customer;
-import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
-import com.gfbdev.entity.dto.CheckedIn;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.utils.Constants;
 import com.gfbdev.utils.StringUtils;
@@ -88,8 +86,6 @@ public class CustomerSession {
             }
 
             Customer customer = (Customer) customerResponse.data;
-            customer.setCheckedIn(new CheckedIn("", ""));
-            repository.save(customer);
             return Response.ok(customer.getCheckedIn());
 
         } catch (Exception e) {
