@@ -102,7 +102,7 @@ public class LobbySession {
             provider.getConsumptions().remove(consumption);
             providerRepository.save(provider);
 
-            customer.setCheckedIn(null);
+            customer.setCheckedIn(new CheckedIn("", ""));
             customerRepository.save(customer);
 
             return Response.ok(getInstance().getString("messages.info.user-checked-out"));
