@@ -42,6 +42,7 @@ public class ProviderSession {
             provider.setLobby(lobby);
             provider.setSales(new ArrayList<>());
             provider.setEmployees(new ArrayList<>());
+            provider.setItems(new ArrayList<>());
             return Response.ok(repository.save(provider));
         } catch (Exception e) {
             e.printStackTrace();
