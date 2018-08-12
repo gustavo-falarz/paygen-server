@@ -1,10 +1,7 @@
 package com.gfbdev.session;
 
 import com.gfbdev.Messages;
-import com.gfbdev.entity.Consumption;
-import com.gfbdev.entity.Customer;
-import com.gfbdev.entity.Provider;
-import com.gfbdev.entity.Response;
+import com.gfbdev.entity.*;
 import com.gfbdev.entity.dto.ConsumptionDTO;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +22,16 @@ public class ConsumptionSession {
     private final
     ProviderRepository providerRepository;
 
+    private final
+    ProductSession productSession;
+
     @Autowired
     public ConsumptionSession(CustomerSession customerSession, ProviderSession providerSession,
-                              ProviderRepository providerRepository) {
+                              ProviderRepository providerRepository, ProductSession productSession) {
         this.customerSession = customerSession;
         this.providerSession = providerSession;
         this.providerRepository = providerRepository;
+        this.productSession = productSession;
     }
 
 
@@ -72,27 +73,33 @@ public class ConsumptionSession {
         }
     }
 
-    public Response addItem(ConsumptionDTO dto) {
+    public Response addItem(String providerId, String customerId, String itemId) {
         try {
-            Response responseCustomer = customerSession.findCustomer(dto.getCustomer().getId());
+            Response responseCustomer = customerSession.findCustomer(customerId);
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
-            Response responseProvider = providerSession.findProvider(dto.getProvider().getId());
+            Response responseProvider = providerSession.findProvider(providerId);
             if (!responseProvider.status) {
                 return responseProvider;
             }
 
-            Response responseConsumption = getConsumption(dto.getCustomer().getId(), dto.getProvider().getId());
+            Response reponseItem = productSession.findProduct(itemId);
+            if (!reponseItem.status) {
+                return responseProvider;
+            }
+
+            Response responseConsumption = getConsumption(customerId, providerId);
             if (!responseConsumption.status) {
                 return responseConsumption;
             }
             Provider provider = (Provider) responseProvider.data;
             Consumption consumption = (Consumption) responseConsumption.getData();
+            Item item = (Item) reponseItem.data;
 
             provider.getConsumptions().get(provider.getConsumptions().indexOf(consumption))
                     .getItems()
-                    .addAll(dto.getItems());
+                    .add(item);
 
             providerRepository.save(provider);
             return Response.ok(Messages.getInstance().getString("messages.info.item-added"));
