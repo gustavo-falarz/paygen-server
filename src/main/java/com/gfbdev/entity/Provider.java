@@ -14,17 +14,30 @@ public class Provider extends User {
 
     private Lobby lobby;
 
+    @DBRef
     private List<Transaction> sales;
 
     private List<Consumption> consumptions;
 
+    @DBRef
     private List<User> employees;
+
+    @DBRef
+    private List<Item> items;
 
     private Point location;
 
     private Status status;
 
     private ProviderInfo info;
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 
     public ProviderInfo getInfo() {
         return info;

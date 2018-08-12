@@ -1,10 +1,17 @@
 package com.gfbdev.session;
 
+import com.gfbdev.Messages;
+import com.gfbdev.entity.Item;
 import com.gfbdev.entity.Product;
+import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
 import com.gfbdev.repository.ProductRepository;
+import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -13,22 +20,69 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductSession {
 
+    private final
+    ProductRepository productRepository;
+
+    private final
+    ProviderRepository providerRepository;
+
+    private final
+    ProviderSession providerSession;
+
     @Autowired
-    ProductRepository repository;
-
-    public Response listProducts() {
-        return Response.ok(repository.findAll());
+    public ProductSession(ProductRepository productRepository, ProviderRepository providerRepository, ProviderSession providerSession) {
+        this.productRepository = productRepository;
+        this.providerRepository = providerRepository;
+        this.providerSession = providerSession;
     }
 
-    public Response addProduct(Product product) {
-        return Response.ok(repository.save(product));
-    }
-
-    public Response findProduct(Product product) {
+    public Response listProducts(String providerId) {
         try {
-            return Response.ok(repository.findByDescription(product.getDescription()));
+            Response responseProvider = providerSession.findProvider(providerId);
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+            Provider provider = (Provider) responseProvider.data;
+            return Response.ok(provider.getItems());
         } catch (Exception e) {
-            return Response.error("Problemas ao localizar produto");
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response addProduct(String providerId, Product product) {
+        Response responseProvider = providerSession.findProvider(providerId);
+        if (!responseProvider.status) {
+            return responseProvider;
+        }
+        productRepository.save(product);
+        Provider provider = (Provider) responseProvider.data;
+        provider.getItems().add(product);
+        providerRepository.save(provider);
+
+        return Response.ok(productRepository.save(product));
+    }
+
+    public Response findProduct(String providerId, String query) {
+        try {
+            Response responseProvider = providerSession.findProvider(providerId);
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+            Provider provider = (Provider) responseProvider.data;
+            List<Item> items = new ArrayList<>();
+            for (Item i : provider.getItems()) {
+                if (i.getDescription().toLowerCase().contains(query.toLowerCase())) {
+                    items.add(i);
+                }
+            }
+            if (items.size() == 0) {
+                return Response.error(Messages.getInstance().getString("messages.error.no-items-found"));
+            }
+            return Response.ok(items);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
         }
     }
 }

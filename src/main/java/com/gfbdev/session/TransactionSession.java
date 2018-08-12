@@ -61,10 +61,10 @@ public class TransactionSession {
             Customer customer = (Customer) responseCustomer.getData();
             Provider provider = (Provider) responseProvider.getData();
 
-            transactionRepository.save(transaction);
+            Transaction savedTransaction = transactionRepository.save(transaction);
 
-            customer.getPurchases().add(transaction);
-            provider.getSales().add(transaction);
+            customer.getPurchases().add(savedTransaction);
+            provider.getSales().add(savedTransaction);
 
             customerRepository.save(customer);
             providerRepository.save(provider);
@@ -82,6 +82,7 @@ public class TransactionSession {
             return Response.ok(Messages.getInstance().getString("messages.success.transaction-saved"));
 
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.error(e.getMessage());
         }
     }

@@ -4,17 +4,14 @@ import com.gfbdev.entity.Product;
 import com.gfbdev.entity.Response;
 import com.gfbdev.session.ProductSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Headtrap on 15/07/2017.
  */
 @RestController
-@RequestMapping("/product")
-public class ProductController{
+@RequestMapping("/item")
+public class ProductController {
     private final
     ProductSession session;
 
@@ -23,18 +20,18 @@ public class ProductController{
         this.session = session;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Response getUsers() {
-        return session.listProducts();
+    @RequestMapping("listProducts/{providerId}")
+    public Response getItems(@PathVariable("providerId") String providerId) {
+        return session.listProducts(providerId);
     }
 
-    @RequestMapping("/addProduct")
-    public Response addProduct(@RequestBody Product product){
-        return session.addProduct(product);
+    @RequestMapping("/addProduct/{providerId}")
+    public Response addProduct(@RequestBody Product product, @PathVariable("providerId") String providerId) {
+        return session.addProduct(providerId, product);
     }
 
-    @RequestMapping("/findProduct")
-    public Response findProduct(@RequestBody Product product){
-        return session.findProduct(product);
+    @RequestMapping("/findProduct/{providerId}/{query}")
+    public Response findProduct(@PathVariable("providerId") String providerId, @PathVariable("query") String query) {
+        return session.findProduct(providerId, query);
     }
 }

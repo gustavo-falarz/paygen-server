@@ -1,6 +1,7 @@
 package com.gfbdev.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class Transaction {
     @Id
     private String id;
 
+    @DBRef
     private List<Item> items;
 
     private double total;
