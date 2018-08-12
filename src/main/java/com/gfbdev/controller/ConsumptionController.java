@@ -1,7 +1,6 @@
 package com.gfbdev.controller;
 
 
-import com.gfbdev.entity.Item;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.dto.ConsumptionDTO;
 import com.gfbdev.session.ConsumptionSession;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/consumption")
@@ -30,11 +27,11 @@ public class ConsumptionController {
         return session.getConsumption(userId, providerId);
     }
 
-    @RequestMapping("/addItem/{providerId}/{customerId}")
-    public Response additem(@RequestBody Item item,
+    @RequestMapping("/addItem/{providerId}/{customerId}/{itemId}")
+    public Response additem(@PathVariable("itemId") String itemId,
                             @PathVariable("providerId") String providerId,
                             @PathVariable("customerId") String customerId) {
-        return session.addItem(providerId, customerId, item);
+        return session.addItem(providerId, customerId, itemId);
     }
 
     @RequestMapping("/removeItem")

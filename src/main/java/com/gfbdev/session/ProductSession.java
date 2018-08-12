@@ -85,4 +85,17 @@ public class ProductSession {
             return Response.error(e.getMessage());
         }
     }
+
+    public Response findProduct(String id) {
+        try {
+            Item item = productRepository.findOne(id);
+            if (item == null) {
+                return Response.error(Messages.getInstance().getString("messages.error.no-items-found"));
+            }
+            return Response.ok(item);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
 }

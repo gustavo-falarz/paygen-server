@@ -22,12 +22,16 @@ public class ConsumptionSession {
     private final
     ProviderRepository providerRepository;
 
+    private final
+    ProductSession productSession;
+
     @Autowired
     public ConsumptionSession(CustomerSession customerSession, ProviderSession providerSession,
-                              ProviderRepository providerRepository) {
+                              ProviderRepository providerRepository, ProductSession productSession) {
         this.customerSession = customerSession;
         this.providerSession = providerSession;
         this.providerRepository = providerRepository;
+        this.productSession = productSession;
     }
 
 
@@ -69,7 +73,7 @@ public class ConsumptionSession {
         }
     }
 
-    public Response addItem(String providerId, String customerId, Item item) {
+    public Response addItem(String providerId, String customerId, String itemId) {
         try {
             Response responseCustomer = customerSession.findCustomer(customerId);
             if (!responseCustomer.status) {
@@ -80,12 +84,18 @@ public class ConsumptionSession {
                 return responseProvider;
             }
 
+            Response reponseItem = productSession.findProduct(itemId);
+            if (!reponseItem.status) {
+                return responseProvider;
+            }
+
             Response responseConsumption = getConsumption(customerId, providerId);
             if (!responseConsumption.status) {
                 return responseConsumption;
             }
             Provider provider = (Provider) responseProvider.data;
             Consumption consumption = (Consumption) responseConsumption.getData();
+            Item item = (Item) reponseItem.data;
 
             provider.getConsumptions().get(provider.getConsumptions().indexOf(consumption))
                     .getItems()
