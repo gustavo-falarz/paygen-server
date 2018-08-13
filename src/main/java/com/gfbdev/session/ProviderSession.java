@@ -30,6 +30,21 @@ public class ProviderSession {
         }
     }
 
+    public Response findProviderByEmail(String email) {
+        try {
+            Provider provider = repository.findByEmail(email);
+            if (provider == null){
+                return Response.error(Messages.getInstance().getString("messages.error.provider-not-found"));
+            }
+
+            return Response.ok(provider);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
     public Response addProvider(Provider provider) {
         try {
             Provider existing = repository.findByEmail(provider.getEmail());

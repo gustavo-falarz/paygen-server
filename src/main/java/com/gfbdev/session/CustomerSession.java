@@ -42,6 +42,19 @@ public class CustomerSession {
         }
     }
 
+    public Response findCustomerByEmail(String email) {
+        try {
+            Customer customer = repository.findByEmail(email);
+            if (customer == null) {
+                return Response.error(getInstance().getString("messages.error.customer-not-found"));
+            } else {
+                return Response.ok(customer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
     public Response findCustomer(String userId) {
         try {
             Customer customer = repository.findOne(userId);
