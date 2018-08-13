@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface CustomerRepository extends MongoRepository<Customer, String> {
 
-    public Customer findByCpf(String cpf);
+    Customer findByEmail(String email);
 
 }
 
