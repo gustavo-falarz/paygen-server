@@ -58,7 +58,8 @@ public class ProviderSession {
             provider.setSales(new ArrayList<>());
             provider.setEmployees(new ArrayList<>());
             provider.setItems(new ArrayList<>());
-            return Response.ok(repository.save(provider));
+            repository.save(provider);
+            return Response.ok("Cadastro salvo com sucesso, sua candidatura será avaliada em até 3 dias úteis, assim que o obvermos os resultados entraremos em contato");
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
