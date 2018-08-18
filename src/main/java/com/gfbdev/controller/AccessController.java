@@ -27,5 +27,9 @@ public class AccessController {
     public Response validateProvider(@PathVariable("email") String email, @PathVariable("password") String password) {
         return accessSession.validateProvider(email, password);
     }
+    @RequestMapping("/validateProvider/{email}/{password}")
+    public Response validateEmployee(@PathVariable("email") String email, @PathVariable("password") String password) {
+        return accessSession.validateEmployee(email, password);
+    }
 
 }

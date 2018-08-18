@@ -6,4 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping
 public interface UserRepository extends MongoRepository<User, String> {
+
+    User findByEmail(String email);
 }

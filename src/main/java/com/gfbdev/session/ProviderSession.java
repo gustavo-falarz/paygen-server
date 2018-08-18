@@ -33,7 +33,7 @@ public class ProviderSession {
     public Response findProviderByEmail(String email) {
         try {
             Provider provider = repository.findByEmail(email);
-            if (provider == null){
+            if (provider == null) {
                 return Response.error(Messages.getInstance().getString("messages.error.provider-not-found"));
             }
 
@@ -59,7 +59,7 @@ public class ProviderSession {
             provider.setEmployees(new ArrayList<>());
             provider.setItems(new ArrayList<>());
             repository.save(provider);
-            return Response.ok("Cadastro salvo com sucesso, sua candidatura será avaliada em até 3 dias úteis, assim que o obvermos os resultados entraremos em contato");
+            return Response.ok("Cadastro salvo com sucesso, sua candidatura será avaliada em até 3 dias úteis, assim que o obitvermos os resultados entraremos em contato");
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
