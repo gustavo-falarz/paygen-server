@@ -27,9 +27,19 @@ public class AccessController {
     public Response validateProvider(@PathVariable("email") String email, @PathVariable("password") String password) {
         return accessSession.validateProvider(email, password);
     }
-    @RequestMapping("/validateProvider/{email}/{password}")
+
+    @RequestMapping("/validateEmployee/{email}/{password}")
     public Response validateEmployee(@PathVariable("email") String email, @PathVariable("password") String password) {
         return accessSession.validateEmployee(email, password);
     }
 
+    @RequestMapping("/googleSignin/{email}/{name}")
+    public Response googleSignin(@PathVariable("email") String email, @PathVariable("name") String name) {
+        return accessSession.googleSignin(email, name);
+    }
+
+    @RequestMapping("/changePassword/{userId}/{password}")
+    public Response changePassword(@PathVariable("userId") String userId, @PathVariable("password") String password) {
+        return accessSession.changePassword(userId, password);
+    }
 }

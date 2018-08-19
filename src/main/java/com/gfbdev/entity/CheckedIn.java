@@ -1,4 +1,4 @@
-package com.gfbdev.entity.dto;
+package com.gfbdev.entity;
 
 public class CheckedIn {
 

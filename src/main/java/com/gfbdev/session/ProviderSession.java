@@ -5,20 +5,24 @@ import com.gfbdev.entity.Lobby;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
 import com.gfbdev.repository.ProviderRepository;
+import com.gfbdev.utils.Constants;
+import com.gfbdev.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+import static com.gfbdev.service.EmailService.sendEmailNewUser;
+
 @Component
 public class ProviderSession {
 
     @Autowired
-    ProviderRepository repository;
+    ProviderRepository providerRepository;
 
     public Response findProvider(String id) {
         try {
-            Provider provider = repository.findOne(id);
+            Provider provider = providerRepository.findOne(id);
             if (provider == null) {
                 return Response.error(Messages.getInstance().getString("messages.error.provider-not-found"));
             } else {
@@ -32,7 +36,7 @@ public class ProviderSession {
 
     public Response findProviderByEmail(String email) {
         try {
-            Provider provider = repository.findByEmail(email);
+            Provider provider = providerRepository.findByEmail(email);
             if (provider == null) {
                 return Response.error(Messages.getInstance().getString("messages.error.provider-not-found"));
             }
@@ -47,10 +51,11 @@ public class ProviderSession {
 
     public Response addProvider(Provider provider) {
         try {
-            Provider existing = repository.findByEmail(provider.getEmail());
+            Provider existing = providerRepository.findByEmail(provider.getEmail());
             if (existing != null) {
                 return Response.error(Messages.getInstance().getString("messages.error.provider-already-registered"));
             }
+            provider.setId(null);
             provider.setConsumptions(new ArrayList<>());
             Lobby lobby = new Lobby();
             lobby.setCustomerList(new ArrayList<>());
@@ -58,7 +63,11 @@ public class ProviderSession {
             provider.setSales(new ArrayList<>());
             provider.setEmployees(new ArrayList<>());
             provider.setItems(new ArrayList<>());
-            repository.save(provider);
+            provider.setPassword(StringUtils.generateRandomCode());
+            String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION,
+                    provider.getPassword());
+            sendEmailNewUser(provider.getEmail(), message);
+            providerRepository.save(provider);
             return Response.ok("Cadastro salvo com sucesso, sua candidatura será avaliada em até 3 dias úteis, assim que o obitvermos os resultados entraremos em contato");
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,9 +75,23 @@ public class ProviderSession {
         }
     }
 
+    public Response listEmployees(String providerid) {
+        try {
+            Response responseProvider = findProvider(providerid);
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+
+            Provider provider = (Provider) responseProvider.data;
+            return Response.ok(provider.getEmployees());
+        } catch (Exception e) {
+            return Response.error(e.getMessage());
+        }
+    }
+
     public Response findAll() {
         try {
-            return Response.ok(repository.findAll());
+            return Response.ok(providerRepository.findAll());
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());

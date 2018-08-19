@@ -1,12 +1,24 @@
 package com.gfbdev.entity.dto;
 
-public class ProviderLoginDTO {
+import com.gfbdev.entity.User;
+
+public class LoginDTO {
 
     private String providerId;
 
     private String userId;
 
     private String token;
+
+    private User.Status status;
+
+    public User.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(User.Status status) {
+        this.status = status;
+    }
 
     public String getProviderId() {
         return providerId;
@@ -32,7 +44,7 @@ public class ProviderLoginDTO {
         this.token = token;
     }
 
-    public ProviderLoginDTO(String providerId, String userId, String token) {
+    public LoginDTO(String providerId, String userId, String token) {
         this.providerId = providerId;
         this.userId = userId;
         this.token = token;

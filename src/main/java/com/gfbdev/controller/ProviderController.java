@@ -19,7 +19,7 @@ public class ProviderController {
     }
 
     @GetMapping
-    public Response findAll(){
+    public Response findAll() {
         return providerSession.findAll();
     }
 
@@ -31,6 +31,11 @@ public class ProviderController {
     @RequestMapping("/findProvider/{id}")
     public Response findProvider(@PathVariable String id) {
         return providerSession.findProvider(id);
+    }
+
+    @RequestMapping("/listEmployees/{providerId}")
+    public Response listEmployees(@PathVariable("providerId") String providerId) {
+        return providerSession.listEmployees(providerId);
     }
 
 }

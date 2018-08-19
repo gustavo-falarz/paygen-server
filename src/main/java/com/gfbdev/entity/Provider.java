@@ -27,8 +27,6 @@ public class Provider extends User {
 
     private Point location;
 
-    private Status status;
-
     private ProviderInfo info;
 
     public List<Item> getItems() {
@@ -87,17 +85,5 @@ public class Provider extends User {
         this.location = location;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public enum Status {
-        PENDING,
-        ACTIVE
-    }
 
 }

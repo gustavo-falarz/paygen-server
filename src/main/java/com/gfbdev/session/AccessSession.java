@@ -2,7 +2,8 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
-import com.gfbdev.entity.dto.ProviderLoginDTO;
+import com.gfbdev.entity.CheckedIn;
+import com.gfbdev.entity.dto.LoginDTO;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.EmployeeRepository;
 import com.gfbdev.repository.ProviderRepository;
@@ -28,9 +29,12 @@ public class AccessSession {
     final private ProviderSession providerSession;
 
     @Autowired
-    public AccessSession(CustomerSession customerSession, CustomerRepository customerRepository,
+    public AccessSession(CustomerSession customerSession,
+                         CustomerRepository customerRepository,
                          ProviderRepository providerRepository,
-                         EmployeeSession employeeSession, EmployeeRepository employeeRepository, ProviderSession providerSession) {
+                         EmployeeSession employeeSession,
+                         EmployeeRepository employeeRepository,
+                         ProviderSession providerSession) {
         this.customerSession = customerSession;
         this.customerRepository = customerRepository;
         this.providerRepository = providerRepository;
@@ -50,7 +54,9 @@ public class AccessSession {
             if (customer.getPassword().equals(password)) {
                 customer.setToken(getToken());
                 customerRepository.save(customer);
-                return Response.ok(customer.getToken());
+                LoginDTO dto = new LoginDTO("", customer.getId(), customer.getToken());
+                dto.setStatus(customer.getStatus());
+                return Response.ok(dto);
             } else {
                 return Response.error(Messages.getInstance()
                         .getString("messages.error.invalid-password"));
@@ -72,7 +78,7 @@ public class AccessSession {
             if (employee.getPassword().equals(password)) {
                 employee.setToken(getToken());
                 employeeRepository.save(employee);
-                ProviderLoginDTO dto = new ProviderLoginDTO(employee.getProviderId(), employee.getId(), employee.getToken());
+                LoginDTO dto = new LoginDTO(employee.getProviderId(), employee.getId(), employee.getToken());
                 return Response.ok(dto);
             } else {
                 return Response.error(Messages.getInstance().getString("messages.error.invalid-password"));
@@ -93,11 +99,49 @@ public class AccessSession {
             if (provider.getPassword().equals(password)) {
                 provider.setToken(getToken());
                 providerRepository.save(provider);
-                ProviderLoginDTO dto = new ProviderLoginDTO(provider.getId(), "", provider.getToken());
+                LoginDTO dto = new LoginDTO(provider.getId(), "", provider.getToken());
                 return Response.ok(dto);
             } else {
                 return Response.error(Messages.getInstance().getString("messages.error.invalid-password"));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response changePassword(String userId, String password) {
+        try {
+            if (password.length() < 6) {
+                return Response.error(Messages.getInstance().getString("messages.error.password-too-short"));
+            }
+            Response responseCustomer = customerSession.findCustomer(userId);
+            if (!responseCustomer.status) {
+                return responseCustomer;
+            }
+            Customer customer = (Customer) responseCustomer.data;
+            customer.setPassword(password);
+            customer.setCheckedIn(new CheckedIn("", ""));
+            customer.setStatus(User.Status.ACTIVE);
+            return Response.ok(Messages.getInstance().getString("messages.success.password-changed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response googleSignin(String email, String name) {
+        try {
+            Customer customer = customerRepository.findByEmail(email);
+            if (customer == null) {
+                customer = new Customer();
+                customer.setEmail(email);
+                customer.setName(name);
+            }
+            customer.setStatus(User.Status.ACTIVE);
+            customer.setToken(getToken());
+            String id = customerRepository.save(customer).getId();
+            return Response.ok(new LoginDTO("", id, customer.getToken()));
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());

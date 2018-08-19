@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by Headtrap on 15/07/2017.
  */
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/product")
 public class ProductController {
     private final
     ProductSession session;

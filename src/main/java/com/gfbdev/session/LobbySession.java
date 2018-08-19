@@ -4,7 +4,7 @@ import com.gfbdev.entity.Consumption;
 import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
-import com.gfbdev.entity.dto.CheckedIn;
+import com.gfbdev.entity.CheckedIn;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;

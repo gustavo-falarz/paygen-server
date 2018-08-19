@@ -1,7 +1,6 @@
 package com.gfbdev.entity;
 
 
-import com.gfbdev.entity.dto.CheckedIn;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
@@ -17,17 +16,8 @@ public class Customer extends User {
     @DBRef
     private List<Transaction> purchases;
 
-    private Status status;
-
     private CheckedIn checkedIn;
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 
     public List<Transaction> getPurchases() {
         return purchases;
@@ -53,8 +43,4 @@ public class Customer extends User {
         this.checkedIn = checkedIn;
     }
 
-    public enum Status{
-        ACTIVE,
-        PENDING
-    }
 }
