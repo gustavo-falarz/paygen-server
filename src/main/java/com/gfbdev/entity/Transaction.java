@@ -1,5 +1,6 @@
 package com.gfbdev.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,7 @@ public class Transaction {
     private String providerId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date date;
 
     public Date getDate() {
