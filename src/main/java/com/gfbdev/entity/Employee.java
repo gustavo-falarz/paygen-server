@@ -1,7 +1,5 @@
 package com.gfbdev.entity;
 
-import javafx.util.Builder;
-
 import java.util.List;
 
 public class Employee extends User {
