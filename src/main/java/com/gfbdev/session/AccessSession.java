@@ -121,7 +121,7 @@ public class AccessSession {
             }
             Customer customer = (Customer) responseCustomer.data;
             customer.setPassword(password);
-            customer.setCheckedIn(new CheckedIn("", ""));
+            customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setStatus(User.Status.ACTIVE);
             return Response.ok(Messages.getInstance().getString("messages.success.password-changed"));
         } catch (Exception e) {

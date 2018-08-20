@@ -2,6 +2,7 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.Customer;
+import com.gfbdev.entity.ProviderInfo;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.CheckedIn;
 import com.gfbdev.repository.CustomerRepository;
@@ -32,7 +33,7 @@ public class CustomerSession {
                 return Response.error(getInstance().getString("messages.error.provider-already-registered"));
             }
             customer.setStatus(Customer.Status.PENDING);
-            customer.setCheckedIn(new CheckedIn("", ""));
+            customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setPassword(StringUtils.generateRandomCode());
             customer.setPurchases(new ArrayList<>());
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION, customer.getPassword());

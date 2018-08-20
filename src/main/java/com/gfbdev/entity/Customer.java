@@ -1,6 +1,7 @@
 package com.gfbdev.entity;
 
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Customer extends User {
     private String cpf;
 
     @DBRef
+    @Lazy
     private List<Transaction> purchases;
 
     private CheckedIn checkedIn;

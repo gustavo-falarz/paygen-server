@@ -5,6 +5,7 @@ import com.gfbdev.entity.Transaction;
 import com.gfbdev.entity.dto.TransactioDTO;
 import com.gfbdev.session.TransactionSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,11 @@ public class TransactionController {
     @RequestMapping("/addTransaction")
     public Response add(@RequestBody Transaction transaction) {
         return session.add(transaction);
+    }
+
+    @RequestMapping("/getTransactions/{providerId}")
+    public Response getTransactions(@PathVariable("providerId") String providerId) {
+        return session.geTransactions(providerId);
     }
 
 }

@@ -6,11 +6,21 @@ public class CheckedIn {
 
     private String name;
 
-    public CheckedIn(String id, String name) {
+    private ProviderInfo info;
+
+    public CheckedIn(String id, String name, ProviderInfo info) {
         this.id = id;
         this.name = name;
+        this.info = info;
     }
 
+    public ProviderInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(ProviderInfo info) {
+        this.info = info;
+    }
     public String getId() {
         return id;
     }

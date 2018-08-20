@@ -2,7 +2,9 @@ package com.gfbdev.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 public class Transaction {
@@ -22,6 +24,17 @@ public class Transaction {
     private String customerId;
 
     private String providerId;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public Payment getPayment() {
         return payment;

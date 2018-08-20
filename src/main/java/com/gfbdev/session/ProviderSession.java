@@ -2,8 +2,10 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.Lobby;
+import com.gfbdev.entity.Product;
 import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
+import com.gfbdev.entity.dto.ImagesDTO;
 import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.utils.Constants;
 import com.gfbdev.utils.StringUtils;
@@ -92,6 +94,39 @@ public class ProviderSession {
     public Response findAll() {
         try {
             return Response.ok(providerRepository.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response getImages(String providerId) {
+        try {
+            Response responseProvider = findProvider(providerId);
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+            Provider provider = (Provider) responseProvider.data;
+            return Response.ok(new ImagesDTO(String.valueOf(provider.getInfo().getBanner()),
+                    String.valueOf(provider.getInfo().getLogo())));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response setImages(String providerId, ImagesDTO dto) {
+        try {
+            Response responseProvider = findProvider(providerId);
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+            Provider provider = (Provider) responseProvider.data;
+            provider.getInfo().setBanner(dto.getBanner());
+            provider.getInfo().setLogo(dto.getLogo());
+            providerRepository.save(provider);
+
+            return Response.ok(Messages.getInstance().getString("messages.success.images-set"));
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
