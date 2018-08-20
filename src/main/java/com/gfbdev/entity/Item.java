@@ -2,6 +2,8 @@ package com.gfbdev.entity;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Objects;
+
 public class Item {
 
     @Id
@@ -53,5 +55,19 @@ public class Item {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(id, item.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

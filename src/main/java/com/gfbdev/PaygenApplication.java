@@ -1,6 +1,5 @@
 package com.gfbdev;
 
-import com.gfbdev.entity.Provider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -8,6 +8,9 @@ import com.gfbdev.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by Headtrap on 28/08/2017.
  */
@@ -60,7 +63,7 @@ public class TransactionSession {
 
             Customer customer = (Customer) responseCustomer.getData();
             Provider provider = (Provider) responseProvider.getData();
-
+            transaction.setDate(new Date());
             Transaction savedTransaction = transactionRepository.save(transaction);
 
             customer.getPurchases().add(savedTransaction);
@@ -83,6 +86,21 @@ public class TransactionSession {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response geTransactions(String providerId) {
+        try {
+            Response responseProvider = providerSession.findProvider(providerId);
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+
+            Provider provider = (Provider) responseProvider.data;
+            return Response.ok(provider.getSales());
+
+        } catch (Exception e) {
             return Response.error(e.getMessage());
         }
     }

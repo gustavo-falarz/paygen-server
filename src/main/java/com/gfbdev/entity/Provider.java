@@ -1,6 +1,7 @@
 package com.gfbdev.entity;
 
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -15,19 +16,21 @@ public class Provider extends User {
     private Lobby lobby;
 
     @DBRef
+    @Lazy
     private List<Transaction> sales;
 
+    @Lazy
     private List<Consumption> consumptions;
 
     @DBRef
+    @Lazy
     private List<User> employees;
 
     @DBRef
+    @Lazy
     private List<Item> items;
 
     private Point location;
-
-    private Status status;
 
     private ProviderInfo info;
 
@@ -87,17 +90,5 @@ public class Provider extends User {
         this.location = location;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public enum Status {
-        PENDING,
-        ACTIVE
-    }
 
 }

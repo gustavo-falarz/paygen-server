@@ -6,4 +6,13 @@ package com.gfbdev.entity;
  */
 
 public class Product extends Item {
+    private long amount;
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(long ammount) {
+        this.amount = ammount;
+    }
 }

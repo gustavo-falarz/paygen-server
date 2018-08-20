@@ -2,7 +2,9 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.Customer;
+import com.gfbdev.entity.ProviderInfo;
 import com.gfbdev.entity.Response;
+import com.gfbdev.entity.CheckedIn;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.utils.Constants;
 import com.gfbdev.utils.StringUtils;
@@ -26,16 +28,18 @@ public class CustomerSession {
 
     public Response addCustomer(Customer customer) {
         try {
-            Customer existingCustomer = repository.findOne(customer.getEmail());
+            Customer existingCustomer = repository.findByEmail(customer.getEmail());
             if (existingCustomer != null) {
                 return Response.error(getInstance().getString("messages.error.provider-already-registered"));
             }
             customer.setStatus(Customer.Status.PENDING);
+            customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setPassword(StringUtils.generateRandomCode());
             customer.setPurchases(new ArrayList<>());
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION, customer.getPassword());
+            repository.save(customer);
             sendEmailNewUser(customer.getEmail(), message);
-            return Response.ok(repository.save(customer));
+            return Response.ok(Messages.getInstance().getString("messages.success.customer-registered"));
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(getInstance().getString("messages.error.provider-problems-saving-user"));
@@ -55,6 +59,7 @@ public class CustomerSession {
             return Response.error(e.getMessage());
         }
     }
+
     public Response findCustomer(String userId) {
         try {
             Customer customer = repository.findOne(userId);

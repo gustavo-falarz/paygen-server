@@ -55,12 +55,22 @@ public class ProductSession {
         if (!responseProvider.status) {
             return responseProvider;
         }
-        productRepository.save(product);
+
         Provider provider = (Provider) responseProvider.data;
-        provider.getItems().add(product);
+        if (provider.getItems().contains(product)){
+            provider.getItems().remove(product);
+        }
+
+        Product definitive = product;
+        if (product.getId()== null || product.getId().equals("")){
+            definitive = build(product);
+        }
+
+        productRepository.save(definitive);
+        provider.getItems().add(definitive);
         providerRepository.save(provider);
 
-        return Response.ok(productRepository.save(product));
+        return Response.ok(Messages.getInstance().getString("messages.success.product-saved"));
     }
 
     public Response findProduct(String providerId, String query) {
@@ -97,5 +107,14 @@ public class ProductSession {
             e.printStackTrace();
             return Response.error(e.getMessage());
         }
+    }
+
+    public Product build(Product product){
+        Product building = new Product();
+        building.setAmount(product.getAmount());
+        building.setValue(product.getValue());
+        building.setDescription(product.getDescription());
+        building.setPrice(product.getPrice());
+        return building;
     }
 }

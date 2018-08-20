@@ -1,10 +1,6 @@
 package com.gfbdev.session;
 
-import com.gfbdev.entity.Consumption;
-import com.gfbdev.entity.Customer;
-import com.gfbdev.entity.Provider;
-import com.gfbdev.entity.Response;
-import com.gfbdev.entity.dto.CheckedIn;
+import com.gfbdev.entity.*;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +57,7 @@ public class LobbySession {
             provider.getLobby().getCustomerList().add(customer);
             providerRepository.save(provider);
 
-            customer.setCheckedIn(new CheckedIn(provider.getId(), provider.getName()));
+            customer.setCheckedIn(new CheckedIn(provider.getId(), provider.getName(), provider.getInfo()));
             customerRepository.save(customer);
             return Response.ok(getInstance().getString("messages.info.user-checked-in"));
 
@@ -102,7 +98,7 @@ public class LobbySession {
             provider.getConsumptions().remove(consumption);
             providerRepository.save(provider);
 
-            customer.setCheckedIn(new CheckedIn("", ""));
+            customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customerRepository.save(customer);
 
             return Response.ok(getInstance().getString("messages.info.user-checked-out"));

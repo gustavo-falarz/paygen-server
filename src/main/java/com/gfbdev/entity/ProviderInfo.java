@@ -12,6 +12,16 @@ public class ProviderInfo {
 
     private String banner;
 
+    private String logo;
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     private List<OpenHours> openHours;
 
     public List<OpenHours> getOpenHours() {

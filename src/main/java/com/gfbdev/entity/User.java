@@ -21,6 +21,8 @@ public class User {
 
     private String token;
 
+    private Status status;
+
     public String getToken() {
         return token;
     }
@@ -61,6 +63,14 @@ public class User {
         this.name = name;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,5 +83,10 @@ public class User {
     public int hashCode() {
 
         return Objects.hash(id);
+    }
+
+    public enum Status {
+        ACTIVE,
+        PENDING
     }
 }
