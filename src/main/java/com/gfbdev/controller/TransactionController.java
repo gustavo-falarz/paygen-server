@@ -1,5 +1,6 @@
 package com.gfbdev.controller;
 
+import com.gfbdev.entity.Delivery;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.Transaction;
 import com.gfbdev.entity.dto.TransactioDTO;
@@ -33,6 +34,16 @@ public class TransactionController {
     @RequestMapping("/getTransactions/{providerId}")
     public Response getTransactions(@PathVariable("providerId") String providerId) {
         return session.geTransactions(providerId);
+    }
+
+    @RequestMapping("/addDelivery")
+    public Response addDelivery(@RequestBody Delivery delivery) {
+        return session.addDelivery(delivery);
+    }
+
+    @RequestMapping("/updateDelivery")
+    public Response updateDelivery(@RequestBody Delivery delivery) {
+        return session.updateDelivery(delivery);
     }
 
 }

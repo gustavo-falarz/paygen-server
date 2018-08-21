@@ -3,13 +3,13 @@ package com.gfbdev.session;
 import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
 import com.gfbdev.repository.CustomerRepository;
+import com.gfbdev.repository.DeliveryRepository;
 import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Headtrap on 28/08/2017.
@@ -38,8 +38,11 @@ public class TransactionSession {
     private final
     TransactionRepository transactionRepository;
 
+    private final
+    DeliveryRepository deliveryRepository;
+
     @Autowired
-    public TransactionSession(CustomerSession customerSession, ConsumptionSession consumptionSession, ProviderSession providerSession, LobbySession lobbySession, CustomerRepository customerRepository, ProviderRepository providerRepository, TransactionRepository transactionRepository) {
+    public TransactionSession(CustomerSession customerSession, ConsumptionSession consumptionSession, ProviderSession providerSession, LobbySession lobbySession, CustomerRepository customerRepository, ProviderRepository providerRepository, TransactionRepository transactionRepository, DeliveryRepository deliveryRepository) {
         this.customerSession = customerSession;
         this.consumptionSession = consumptionSession;
         this.providerSession = providerSession;
@@ -47,6 +50,7 @@ public class TransactionSession {
         this.customerRepository = customerRepository;
         this.providerRepository = providerRepository;
         this.transactionRepository = transactionRepository;
+        this.deliveryRepository = deliveryRepository;
     }
 
     public Response add(Transaction transaction) {
@@ -100,6 +104,45 @@ public class TransactionSession {
             Provider provider = (Provider) responseProvider.data;
             return Response.ok(provider.getSales());
 
+        } catch (Exception e) {
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response addDelivery(Delivery delivery) {
+        try {
+            Response responseCustomer = customerSession.findCustomer(delivery.getCustomerId());
+            if (!responseCustomer.status) {
+                return responseCustomer;
+            }
+
+            Response responseProvider = providerSession.findProvider(delivery.getProviderId());
+            if (!responseProvider.status) {
+                return responseProvider;
+            }
+
+            Customer customer = (Customer) responseCustomer.getData();
+            Provider provider = (Provider) responseProvider.getData();
+            delivery.setDate(new Date());
+            Transaction savedTransaction = transactionRepository.save(delivery);
+
+            customer.getPurchases().add(savedTransaction);
+            provider.getSales().add(savedTransaction);
+
+            customerRepository.save(customer);
+            providerRepository.save(provider);
+
+            return Response.ok(Messages.getInstance().getString("messages.success.delivery-saved"));
+
+        } catch (Exception e) {
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response updateDelivery(Delivery delivery) {
+        try {
+            deliveryRepository.save(delivery);
+            return Response.ok(Messages.getInstance().getString("messages.success.items-delivered"));
         } catch (Exception e) {
             return Response.error(e.getMessage());
         }
