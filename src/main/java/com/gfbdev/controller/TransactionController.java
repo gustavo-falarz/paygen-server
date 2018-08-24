@@ -36,6 +36,11 @@ public class TransactionController {
         return session.geTransactions(providerId);
     }
 
+    @RequestMapping("/getCustomerTransactions/{customerId}")
+    public Response getCustomerTransactions(@PathVariable("customerId") String providerId) {
+        return session.getCustomerTransactions(providerId);
+    }
+
     @RequestMapping("/findTransaction/{transactionId}")
     public Response findTransaction(@PathVariable("transactionId") String transactionId) {
         return session.findTransaction(transactionId);
@@ -45,6 +50,7 @@ public class TransactionController {
     public Response addDelivery(@RequestBody Delivery delivery) {
         return session.addDelivery(delivery);
     }
+
 
     @RequestMapping("/updateDelivery")
     public Response updateDelivery(@RequestBody Delivery delivery) {
