@@ -8,8 +8,10 @@ import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Headtrap on 28/08/2017.
@@ -158,6 +160,19 @@ public class TransactionSession {
             deliveryRepository.save(delivery);
             return Response.ok(Messages.getInstance().getString("messages.success.items-delivered"));
         } catch (Exception e) {
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response getCustomerTransactions(String customerId) {
+        try {
+            List<Transaction> transactions = transactionRepository.findByCustomerId(customerId);
+            if (transactions == null) {
+                return Response.error("Nenhuma transação encontrada");
+            }
+            return Response.ok(transactions);
+        } catch (Exception e) {
+            e.printStackTrace();
             return Response.error(e.getMessage());
         }
     }

@@ -12,4 +12,6 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
 
     List<Transaction> findByDateBetween(Date start, Date end);
 
+    List<Transaction> findByCustomerId(String customerId);
+
 }
