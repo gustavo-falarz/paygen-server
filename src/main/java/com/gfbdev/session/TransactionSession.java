@@ -94,6 +94,20 @@ public class TransactionSession {
         }
     }
 
+    public Response findTransaction(String transactionId) {
+        try {
+            Transaction transaction = transactionRepository.findOne(transactionId);
+            if (transaction == null) {
+                return Response.ok("Transação não encontrada");
+            }
+
+            return Response.ok((transaction));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
     public Response geTransactions(String providerId) {
         try {
             Response responseProvider = providerSession.findProvider(providerId);

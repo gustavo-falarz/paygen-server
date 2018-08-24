@@ -3,17 +3,19 @@ package com.gfbdev.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
 
+@Eager
 public class Transaction {
 
     @Id
     private String id;
 
-    @DBRef
     private List<Item> items;
 
     private double total;
