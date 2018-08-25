@@ -9,6 +9,8 @@ public class Item {
     @Id
     private String id;
 
+    private String name;
+
     private String description;
 
     private double value;
@@ -16,6 +18,24 @@ public class Item {
     private double price;
 
     private double discount;
+
+    private String picture;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public double getPrice() {
         return price;
