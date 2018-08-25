@@ -24,11 +24,6 @@ public class CustomerController {
         this.session = session;
     }
 
-    @RequestMapping("/addCustomer")
-    public Response addCustomer(@RequestBody Customer customer) {
-        return session.addCustomer(customer);
-    }
-
     @RequestMapping("findCustomer/{cpf}")
     public Response findCustomer(@PathVariable String cpf) {
         return session.findCustomer(cpf);

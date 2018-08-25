@@ -10,5 +10,7 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 
     Customer findByEmail(String email);
 
+    boolean existsByToken(String token);
+
 }
 

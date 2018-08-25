@@ -1,6 +1,5 @@
 package com.gfbdev.controller;
 
-import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.dto.ImagesDTO;
 import com.gfbdev.session.ProviderSession;
@@ -22,11 +21,6 @@ public class ProviderController {
     @GetMapping
     public Response findAll() {
         return providerSession.findAll();
-    }
-
-    @RequestMapping("/addProvider")
-    public Response addProvider(@RequestBody Provider provider) {
-        return providerSession.addProvider(provider);
     }
 
     @RequestMapping("/findProvider/{id}")

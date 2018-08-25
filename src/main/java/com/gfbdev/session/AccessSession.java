@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
+import java.sql.ResultSet;
 import java.util.UUID;
 
 @SuppressWarnings("ALL")
@@ -198,7 +199,21 @@ public class AccessSession {
         }
     }
 
+    public Response validateToken(String token) {
+        boolean result = false;
+        if (token.startsWith("provider")) {
+            result = providerRepository.existsByToken(token);
+        } else {
+            result = customerRepository.existsByToken(token);
+        }
+        if (result) {
+            return Response.ok("Token válido");
+        } else {
+            return Response.error("Acesso inválido");
+        }
+    }
+
     public String getToken() {
-        return UUID.randomUUID().toString();
+        return "provider" + UUID.randomUUID().toString();
     }
 }

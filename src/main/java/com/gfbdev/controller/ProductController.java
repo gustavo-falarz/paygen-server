@@ -4,16 +4,21 @@ import com.gfbdev.entity.Product;
 import com.gfbdev.entity.Response;
 import com.gfbdev.session.ProductSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by Headtrap on 15/07/2017.
  */
 @RestController
 @RequestMapping("/product")
-public class ProductController {
+public class ProductController extends CoreController{
+
     private final
     ProductSession session;
+
 
     @Autowired
     public ProductController(ProductSession session) {

@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface ProviderRepository extends MongoRepository<Provider, String> {
 
     Provider findByEmail(String email);
+
+    boolean existsByToken(String token);
+
 }
