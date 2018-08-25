@@ -8,16 +8,6 @@ package com.gfbdev.entity;
 public class Product extends Item {
     private long amount;
 
-    private String picture;
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
     public long getAmount() {
         return amount;
     }
