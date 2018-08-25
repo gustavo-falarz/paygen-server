@@ -113,7 +113,9 @@ public class ProductSession {
         Product building = new Product();
         building.setAmount(product.getAmount());
         building.setValue(product.getValue());
+        building.setPicture(product.getPicture());
         building.setDescription(product.getDescription());
+        building.setName(product.getName());
         building.setPrice(product.getPrice());
         return building;
     }

@@ -1,6 +1,8 @@
 package com.gfbdev.entity;
 
 
+import com.gfbdev.utils.Password;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.data.annotation.Id;
 
 import java.util.Objects;

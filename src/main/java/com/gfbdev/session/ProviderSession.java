@@ -1,14 +1,13 @@
 package com.gfbdev.session;
 
 import com.gfbdev.Messages;
-import com.gfbdev.entity.Lobby;
-import com.gfbdev.entity.Product;
-import com.gfbdev.entity.Provider;
-import com.gfbdev.entity.Response;
+import com.gfbdev.entity.*;
 import com.gfbdev.entity.dto.ImagesDTO;
 import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.utils.Constants;
+import com.gfbdev.utils.Password;
 import com.gfbdev.utils.StringUtils;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -59,15 +58,18 @@ public class ProviderSession {
             }
             provider.setId(null);
             provider.setConsumptions(new ArrayList<>());
+            provider.setStatus(User.Status.PENDING);
             Lobby lobby = new Lobby();
             lobby.setCustomerList(new ArrayList<>());
             provider.setLobby(lobby);
             provider.setSales(new ArrayList<>());
             provider.setEmployees(new ArrayList<>());
             provider.setItems(new ArrayList<>());
-            provider.setPassword(StringUtils.generateRandomCode());
+            String randomCode = StringUtils.generateRandomCode();
+            String encrypted = Password.getInstance().getEncryptor().encryptPassword(randomCode);
+            provider.setPassword(encrypted);
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION,
-                    provider.getPassword());
+                    randomCode);
             sendEmailNewUser(provider.getEmail(), message);
             providerRepository.save(provider);
             return Response.ok("Cadastro salvo com sucesso, sua candidatura será avaliada em até 3 dias úteis, assim que o obitvermos os resultados entraremos em contato");

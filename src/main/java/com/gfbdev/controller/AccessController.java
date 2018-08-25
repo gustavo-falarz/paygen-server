@@ -42,4 +42,9 @@ public class AccessController {
     public Response changePassword(@PathVariable("userId") String userId, @PathVariable("password") String password) {
         return accessSession.changePassword(userId, password);
     }
+
+    @RequestMapping("/changeProviderPassword/{providerId}/{password}")
+    public Response changeProviderPassword(@PathVariable("providerId") String providerId, @PathVariable("password") String password) {
+        return accessSession.changeProviderPassword(providerId, password);
+    }
 }

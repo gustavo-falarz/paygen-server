@@ -35,6 +35,7 @@ public class CustomerSession {
             customer.setStatus(Customer.Status.PENDING);
             customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setPassword(StringUtils.generateRandomCode());
+            customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setPurchases(new ArrayList<>());
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION, customer.getPassword());
             repository.save(customer);
