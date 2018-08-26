@@ -9,9 +9,13 @@ import com.gfbdev.utils.Password;
 import com.gfbdev.utils.StringUtils;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.gfbdev.service.EmailService.sendEmailNewUser;
 import static com.gfbdev.utils.Constants.PROVIDER_PIC_PLACE_HOLDER;
@@ -132,6 +136,18 @@ public class ProviderSession {
             providerRepository.save(provider);
 
             return Response.ok(Messages.getInstance().getString("messages.success.images-set"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response filter( String latitude, String longitude) {
+        try {
+            Point point = new Point(Double.valueOf(latitude), Double.valueOf(longitude));
+            Distance distance = new Distance(1000, Metrics.KILOMETERS);
+            List<Provider> providers = providerRepository.findByLocationNear(point, distance);
+            return Response.ok(providers);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
