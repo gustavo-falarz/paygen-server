@@ -2,6 +2,7 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
+import com.gfbdev.entity.dto.DateFilter;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.DeliveryRepository;
 import com.gfbdev.repository.ProviderRepository;
@@ -171,6 +172,31 @@ public class TransactionSession {
                 return Response.error("Nenhuma transação encontrada");
             }
             return Response.ok(transactions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response filterSales(String providerId, DateFilter dateFilter) {
+        try {
+            List<Transaction> transactions = transactionRepository
+                    .findByDateBetweenAndProviderId(dateFilter.startDate, dateFilter.endDate, providerId);
+
+            return Response.ok(transactions);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+    public Response filterPurchases(String userId, DateFilter dateFilter) {
+        try {
+            List<Transaction> transactions = transactionRepository
+                    .findByDateBetweenAndCustomerId(dateFilter.startDate, dateFilter.endDate, userId);
+
+            return Response.ok(transactions);
+
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());

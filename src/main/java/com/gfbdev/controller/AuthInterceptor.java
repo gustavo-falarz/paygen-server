@@ -22,11 +22,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("Access-Token");
-        if (getController(AccessController.class, handler) == null){
+        if (getController(AccessController.class, handler) != null) {
             return true;
         }
-
+        String token = request.getHeader("Access-Token");
+        if (token == null) {
+            response.sendError(401, "Usuário não autorizado");
+            return false;
+        }
         if (session.validateToken(token).status) {
             return true;
         } else {

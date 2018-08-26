@@ -12,6 +12,27 @@ public class LoginDTO {
 
     private User.Status status;
 
+    private String picture;
+
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void getUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPicture() {
+
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public User.Status getStatus() {
         return status;
     }
@@ -44,9 +65,14 @@ public class LoginDTO {
         this.token = token;
     }
 
-    public LoginDTO(String providerId, String userId, String token) {
+    public LoginDTO() {
+    }
+
+    public LoginDTO(String providerId, String userId, String token, String picture, String userName) {
         this.providerId = providerId;
         this.userId = userId;
         this.token = token;
+        this.picture = picture;
+        this.userName = userName;
     }
 }

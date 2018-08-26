@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 import static com.gfbdev.service.EmailService.sendEmailNewUser;
+import static com.gfbdev.utils.Constants.PROVIDER_PIC_PLACE_HOLDER;
 
 @Component
 public class ProviderSession {
@@ -56,8 +57,10 @@ public class ProviderSession {
             if (existing != null) {
                 return Response.error(Messages.getInstance().getString("messages.error.provider-already-registered"));
             }
+            provider.getInfo().setLogo(PROVIDER_PIC_PLACE_HOLDER);
             provider.setId(null);
             provider.setConsumptions(new ArrayList<>());
+            provider.getInfo().setLogo(PROVIDER_PIC_PLACE_HOLDER);
             provider.setStatus(User.Status.PENDING);
             Lobby lobby = new Lobby();
             lobby.setCustomerList(new ArrayList<>());

@@ -7,6 +7,8 @@ public class Constants {
 
     public static final String EMAIL_KEY = "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";
     public static final String MESSAGE_PASSWORD_RESET = "Hello,<br><br> We have reset your password, to continue using it log into the app using this email address and the following password: %s .<br><br>Thanks for using our app. <br><br>Best regards from the MyWatchlist Team";
+    public static final String USER_PIC_PLACE_HOLDER = "https://res.cloudinary.com/pineconeapps/image/upload/v1535235572/profile-user.png";
+    public static final String PROVIDER_PIC_PLACE_HOLDER = "https://res.cloudinary.com/pineconeapps/image/upload/v1535236056/cityscape.png";
     public static final String MESSAGE_ACCOUNT_ACTIVATION = "Hello,<br><br> We have created your MyWatchlist account, to start using it log into the app using this email address and the following password: %s .<br><br>Thanks for registering <br><br>Best regards from the MyWatchlist Team";
 
 }

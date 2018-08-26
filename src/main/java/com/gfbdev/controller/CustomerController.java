@@ -2,6 +2,7 @@ package com.gfbdev.controller;
 
 import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.Response;
+import com.gfbdev.entity.dto.LoginDTO;
 import com.gfbdev.session.CustomerSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,4 +45,8 @@ public class CustomerController {
         return session.checkReception(customerId);
     }
 
+    @RequestMapping("/updateProfile")
+    public Response updateProfile(@RequestBody LoginDTO dto) {
+        return session.updateProfile(dto);
+    }
 }

@@ -7,13 +7,17 @@ import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.EmployeeRepository;
 import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.repository.UserRepository;
+import com.gfbdev.utils.Constants;
 import com.gfbdev.utils.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import sun.dc.pr.PRError;
 
 import java.sql.ResultSet;
 import java.util.UUID;
+
+import static com.gfbdev.utils.Constants.USER_PIC_PLACE_HOLDER;
 
 @SuppressWarnings("ALL")
 @Component
@@ -64,7 +68,9 @@ public class AccessSession {
                 LoginDTO dto = new LoginDTO(
                         "",
                         customer.getId(),
-                        customer.getToken());
+                        customer.getToken(),
+                        customer.getName(),
+                        customer.getPicture());
 
                 dto.setStatus(customer.getStatus());
                 return Response.ok(dto);
@@ -93,7 +99,10 @@ public class AccessSession {
                 LoginDTO dto = new LoginDTO(
                         employee.getProviderId(),
                         employee.getId(),
-                        employee.getToken());
+                        employee.getToken(),
+                        USER_PIC_PLACE_HOLDER,
+                        employee.getName());
+
                 return Response.ok(dto);
             } else {
                 return Response.error(Messages.getInstance().getString("messages.error.invalid-password"));
@@ -113,12 +122,14 @@ public class AccessSession {
             Provider provider = (Provider) responseProvider.data;
             StrongPasswordEncryptor encryptor = Password.getInstance().getEncryptor();
             if (encryptor.checkPassword(password, provider.getPassword())) {
-                provider.setToken(getToken());
+                provider.setToken("provider" + getToken());
                 providerRepository.save(provider);
                 LoginDTO dto = new LoginDTO(
                         provider.getId(),
                         provider.getId(),
-                        provider.getToken());
+                        provider.getToken(),
+                        provider.getInfo().getLogo(),
+                        provider.getName());
 
                 dto.setStatus(provider.getStatus());
 
@@ -188,11 +199,18 @@ public class AccessSession {
                 customer = new Customer();
                 customer.setEmail(email);
                 customer.setName(name);
+                customer.setPicture(Constants.USER_PIC_PLACE_HOLDER);
             }
             customer.setStatus(User.Status.ACTIVE);
             customer.setToken(getToken());
             String id = customerRepository.save(customer).getId();
-            return Response.ok(new LoginDTO("", id, customer.getToken()));
+            return Response.ok(new LoginDTO(
+                    "",
+                    id,
+                    customer.getToken(),
+                    customer.getPicture(),
+                    customer.getName()));
+
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
@@ -214,6 +232,6 @@ public class AccessSession {
     }
 
     public String getToken() {
-        return "provider" + UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
 }
