@@ -9,12 +9,10 @@ import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.repository.UserRepository;
 import com.gfbdev.utils.Constants;
 import com.gfbdev.utils.Password;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.jasypt.util.password.StrongPasswordEncryptor;
-import sun.dc.pr.PRError;
 
-import java.sql.ResultSet;
 import java.util.UUID;
 
 import static com.gfbdev.utils.Constants.USER_PIC_PLACE_HOLDER;
