@@ -145,8 +145,8 @@ public class ProviderSession {
     public Response filter( String latitude, String longitude) {
         try {
             Point point = new Point(Double.valueOf(latitude), Double.valueOf(longitude));
-            Distance distance = new Distance(1000, Metrics.KILOMETERS);
-            List<Provider> providers = providerRepository.findByLocationNear(point, distance);
+            Distance distance = new Distance(100, Metrics.KILOMETERS);
+            List<Provider> providers = providerRepository.findByLocationNearOrderByLocation(point, distance);
             return Response.ok(providers);
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface TransactionRepository extends MongoRepository<Transaction, String> {
 
-    List<Transaction> findByProviderId(String providerId);
+    List<Transaction> findByProviderIdOrderByDateDesc(String providerId);
 
-    List<Transaction> findByDateBetweenAndProviderId(Date start, Date end, String providerId);
+    List<Transaction> findByDateBetweenAndProviderIdOrderByDateDesc(Date start, Date end, String providerId);
 
-    List<Transaction> findByDateBetweenAndCustomerId(Date start, Date end, String customerId);
+    List<Transaction> findByDateBetweenAndCustomerIdOrderByDateDesc(Date start, Date end, String customerId);
 
-    List<Transaction> findByCustomerId(String customerId);
+    List<Transaction> findByCustomerIdOrderByDateDesc(String customerId);
 
 }

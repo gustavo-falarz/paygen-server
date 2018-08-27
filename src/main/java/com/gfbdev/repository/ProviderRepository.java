@@ -15,6 +15,6 @@ public interface ProviderRepository extends MongoRepository<Provider, String> {
 
     boolean existsByToken(String token);
 
-    List<Provider> findByLocationNear(Point location,  Distance distance);
+    List<Provider> findByLocationNearOrderByLocation(Point location,  Distance distance);
 
 }
