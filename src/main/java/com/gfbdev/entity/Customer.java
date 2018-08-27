@@ -14,12 +14,21 @@ public class Customer extends User {
 
     private String cpf;
 
+    private String picture;
+
     @DBRef
     @Lazy
     private List<Transaction> purchases;
 
     private CheckedIn checkedIn;
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public List<Transaction> getPurchases() {
         return purchases;

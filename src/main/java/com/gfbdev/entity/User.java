@@ -1,7 +1,10 @@
 package com.gfbdev.entity;
 
 
+import com.gfbdev.utils.Password;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.util.Objects;
 
@@ -11,14 +14,17 @@ import java.util.Objects;
 public class User {
 
     @Id
+    @Indexed
     private String id;
 
     private String name;
 
+    @Indexed
     private String email;
 
     private String password;
 
+    @Indexed
     private String token;
 
     private Status status;

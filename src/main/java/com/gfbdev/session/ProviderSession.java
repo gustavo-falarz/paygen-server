@@ -1,20 +1,24 @@
 package com.gfbdev.session;
 
 import com.gfbdev.Messages;
-import com.gfbdev.entity.Lobby;
-import com.gfbdev.entity.Product;
-import com.gfbdev.entity.Provider;
-import com.gfbdev.entity.Response;
+import com.gfbdev.entity.*;
 import com.gfbdev.entity.dto.ImagesDTO;
 import com.gfbdev.repository.ProviderRepository;
 import com.gfbdev.utils.Constants;
+import com.gfbdev.utils.Password;
 import com.gfbdev.utils.StringUtils;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.gfbdev.service.EmailService.sendEmailNewUser;
+import static com.gfbdev.utils.Constants.PROVIDER_PIC_PLACE_HOLDER;
 
 @Component
 public class ProviderSession {
@@ -57,17 +61,22 @@ public class ProviderSession {
             if (existing != null) {
                 return Response.error(Messages.getInstance().getString("messages.error.provider-already-registered"));
             }
+            provider.getInfo().setLogo(PROVIDER_PIC_PLACE_HOLDER);
             provider.setId(null);
             provider.setConsumptions(new ArrayList<>());
+            provider.getInfo().setLogo(PROVIDER_PIC_PLACE_HOLDER);
+            provider.setStatus(User.Status.PENDING);
             Lobby lobby = new Lobby();
             lobby.setCustomerList(new ArrayList<>());
             provider.setLobby(lobby);
             provider.setSales(new ArrayList<>());
             provider.setEmployees(new ArrayList<>());
             provider.setItems(new ArrayList<>());
-            provider.setPassword(StringUtils.generateRandomCode());
+            String randomCode = StringUtils.generateRandomCode();
+            String encrypted = Password.getInstance().getEncryptor().encryptPassword(randomCode);
+            provider.setPassword(encrypted);
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION,
-                    provider.getPassword());
+                    randomCode);
             sendEmailNewUser(provider.getEmail(), message);
             providerRepository.save(provider);
             return Response.ok("Cadastro salvo com sucesso, sua candidatura será avaliada em até 3 dias úteis, assim que o obitvermos os resultados entraremos em contato");
@@ -127,6 +136,18 @@ public class ProviderSession {
             providerRepository.save(provider);
 
             return Response.ok(Messages.getInstance().getString("messages.success.images-set"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response filter( String latitude, String longitude) {
+        try {
+            Point point = new Point(Double.valueOf(latitude), Double.valueOf(longitude));
+            Distance distance = new Distance(100, Metrics.KILOMETERS);
+            List<Provider> providers = providerRepository.findByLocationNearOrderByLocation(point, distance);
+            return Response.ok(providers);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());

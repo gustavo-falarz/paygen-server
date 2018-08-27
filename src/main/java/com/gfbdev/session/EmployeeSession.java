@@ -6,6 +6,7 @@ import com.gfbdev.entity.Provider;
 import com.gfbdev.entity.Response;
 import com.gfbdev.repository.EmployeeRepository;
 import com.gfbdev.repository.ProviderRepository;
+import com.gfbdev.utils.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,12 +66,12 @@ public class EmployeeSession {
         }
     }
 
-    public Employee build(Employee employee) {
+    private Employee build(Employee employee) {
         Employee building = new Employee();
         employee.setProviderId(employee.getProviderId());
         building.setName(employee.getName());
         building.setEmail(employee.getEmail());
-        building.setPassword(employee.getPassword());
+        building.setPassword(Password.getInstance().getEncryptor().encryptPassword(employee.getPassword()));
         building.setToken(employee.getToken());
         building.setRole(employee.getRole());
         return building;

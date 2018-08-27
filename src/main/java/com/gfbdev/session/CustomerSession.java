@@ -5,6 +5,7 @@ import com.gfbdev.entity.Customer;
 import com.gfbdev.entity.ProviderInfo;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.CheckedIn;
+import com.gfbdev.entity.dto.LoginDTO;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.utils.Constants;
 import com.gfbdev.utils.StringUtils;
@@ -35,6 +36,7 @@ public class CustomerSession {
             customer.setStatus(Customer.Status.PENDING);
             customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setPassword(StringUtils.generateRandomCode());
+            customer.setCheckedIn(new CheckedIn("", "", new ProviderInfo()));
             customer.setPurchases(new ArrayList<>());
             String message = String.format(Constants.MESSAGE_ACCOUNT_ACTIVATION, customer.getPassword());
             repository.save(customer);
@@ -105,6 +107,26 @@ public class CustomerSession {
 
             Customer customer = (Customer) customerResponse.data;
             return Response.ok(customer.getCheckedIn());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response updateProfile( LoginDTO dto) {
+        try {
+            Response customerResponse = findCustomer(dto.getUserId());
+            if (!customerResponse.status) {
+                return Response.error(getInstance().getString("messages.error.customer-not-found"));
+            }
+
+            Customer customer = (Customer) customerResponse.data;
+            customer.setPicture(dto.getPicture());
+            customer.setName(dto.getUserName());
+            repository.save(customer);
+
+            return Response.ok("Perfil atualizado com sucesso.");
 
         } catch (Exception e) {
             e.printStackTrace();

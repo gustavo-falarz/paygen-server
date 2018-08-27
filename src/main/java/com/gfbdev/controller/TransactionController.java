@@ -3,7 +3,7 @@ package com.gfbdev.controller;
 import com.gfbdev.entity.Delivery;
 import com.gfbdev.entity.Response;
 import com.gfbdev.entity.Transaction;
-import com.gfbdev.entity.dto.TransactioDTO;
+import com.gfbdev.entity.dto.DateFilter;
 import com.gfbdev.session.TransactionSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +45,19 @@ public class TransactionController {
     public Response findTransaction(@PathVariable("transactionId") String transactionId) {
         return session.findTransaction(transactionId);
     }
+
+    @RequestMapping("/filterSales/{providerId}")
+    public Response filterSales(@PathVariable("providerId") String providerId,
+                                      @RequestBody DateFilter dateFilter) {
+        return session.filterSales(providerId, dateFilter);
+    }
+
+    @RequestMapping("/filterPurchases/{userId}")
+    public Response filterPurchases(@PathVariable("userId") String providerId,
+                                      @RequestBody DateFilter dateFilter) {
+        return session.filterPurchases(providerId, dateFilter);
+    }
+
 
     @RequestMapping("/addDelivery")
     public Response addDelivery(@RequestBody Delivery delivery) {

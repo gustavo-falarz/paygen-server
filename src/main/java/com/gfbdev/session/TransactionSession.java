@@ -2,6 +2,7 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
+import com.gfbdev.entity.dto.DateFilter;
 import com.gfbdev.repository.CustomerRepository;
 import com.gfbdev.repository.DeliveryRepository;
 import com.gfbdev.repository.ProviderRepository;
@@ -112,15 +113,13 @@ public class TransactionSession {
 
     public Response geTransactions(String providerId) {
         try {
-            Response responseProvider = providerSession.findProvider(providerId);
-            if (!responseProvider.status) {
-                return responseProvider;
+            List<Transaction> transactions = transactionRepository.findByProviderIdOrderByDateDesc(providerId);
+            if (transactions == null) {
+                return Response.error("Nenhuma transação encontrada");
             }
-
-            Provider provider = (Provider) responseProvider.data;
-            return Response.ok(provider.getSales());
-
+            return Response.ok(transactions);
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.error(e.getMessage());
         }
     }
@@ -166,11 +165,37 @@ public class TransactionSession {
 
     public Response getCustomerTransactions(String customerId) {
         try {
-            List<Transaction> transactions = transactionRepository.findByCustomerId(customerId);
+            List<Transaction> transactions = transactionRepository.findByCustomerIdOrderByDateDesc(customerId);
             if (transactions == null) {
                 return Response.error("Nenhuma transação encontrada");
             }
             return Response.ok(transactions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response filterSales(String providerId, DateFilter dateFilter) {
+        try {
+            List<Transaction> transactions = transactionRepository
+                    .findByDateBetweenAndProviderIdOrderByDateDesc(dateFilter.startDate, dateFilter.endDate, providerId);
+
+            return Response.ok(transactions);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(e.getMessage());
+        }
+    }
+
+    public Response filterPurchases(String userId, DateFilter dateFilter) {
+        try {
+            List<Transaction> transactions = transactionRepository
+                    .findByDateBetweenAndCustomerIdOrderByDateDesc(dateFilter.startDate, dateFilter.endDate, userId);
+
+            return Response.ok(transactions);
+
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
