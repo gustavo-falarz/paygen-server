@@ -34,8 +34,10 @@ public class ConsumptionController {
         return session.addItem(providerId, customerId, itemId);
     }
 
-    @RequestMapping("/removeItem")
-    public Response removeItem(@RequestBody ConsumptionDTO dto) {
-        return session.removeItem(dto);
+    @RequestMapping("/removeItem/{providerId}/{customerId}/{itemId}")
+    public Response removeItem(@PathVariable("providerId") String providerId,
+                               @PathVariable("customerId") String customerId,
+                               @PathVariable("itemId") String itemId) {
+        return session.removeItem(providerId, customerId, itemId);
     }
 }
