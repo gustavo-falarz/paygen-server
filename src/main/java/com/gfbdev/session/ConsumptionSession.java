@@ -2,7 +2,7 @@ package com.gfbdev.session;
 
 import com.gfbdev.Messages;
 import com.gfbdev.entity.*;
-import com.gfbdev.entity.dto.ConsumptionDTO;
+import com.gfbdev.repository.ProductRepository;
 import com.gfbdev.repository.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,13 +25,18 @@ public class ConsumptionSession {
     private final
     ProductSession productSession;
 
+    private final
+    ProductRepository productRepository;
+
+
     @Autowired
     public ConsumptionSession(CustomerSession customerSession, ProviderSession providerSession,
-                              ProviderRepository providerRepository, ProductSession productSession) {
+                              ProviderRepository providerRepository, ProductSession productSession, ProductRepository productRepository) {
         this.customerSession = customerSession;
         this.providerSession = providerSession;
         this.providerRepository = providerRepository;
         this.productSession = productSession;
+        this.productRepository = productRepository;
     }
 
 
@@ -95,12 +100,14 @@ public class ConsumptionSession {
             }
             Provider provider = (Provider) responseProvider.data;
             Consumption consumption = (Consumption) responseConsumption.getData();
-            Item item = (Item) reponseItem.data;
+            Product product = (Product) reponseItem.data;
+            product.setAmount(product.getAmount() + 1);
 
             provider.getConsumptions().get(provider.getConsumptions().indexOf(consumption))
                     .getItems()
-                    .add(item);
+                    .add(product);
 
+            productRepository.save(product);
             providerRepository.save(provider);
             return Response.ok(Messages.getInstance().getString("messages.info.item-added"));
         } catch (Exception e) {
@@ -109,24 +116,39 @@ public class ConsumptionSession {
         }
     }
 
-    public Response removeItem(ConsumptionDTO dto) {
+    public Response removeItem(String providerId, String customerId, String itemId) {
         try {
-            Response responseCustomer = customerSession.findCustomer(dto.getCustomer().getId());
+            Response responseCustomer = customerSession.findCustomer(customerId);
             if (!responseCustomer.status) {
                 return responseCustomer;
             }
-            Response responseProvider = customerSession.findCustomer(dto.getCustomer().getId());
+            Response responseProvider = providerSession.findProvider(providerId);
             if (!responseProvider.status) {
                 return responseProvider;
             }
 
-            Response responseConsumption = getConsumption(dto.getCustomer().getId(), dto.getProvider().getId());
+            Response responseConsumption = getConsumption(customerId, providerId);
             if (!responseConsumption.status) {
                 return responseConsumption;
             }
 
+            Response responseItem = productSession.findProduct(itemId);
+            if (!responseItem.status) {
+                return responseItem;
+            }
+
+            Provider provider = (Provider) responseProvider.data;
             Consumption consumption = (Consumption) responseConsumption.getData();
-            consumption.getItems().removeAll(dto.getItems());
+            Product product = (Product) responseItem.data;
+            product.setAmount(product.getAmount() - 1);
+
+            provider.getConsumptions().get(provider.getConsumptions().indexOf(consumption))
+                    .getItems()
+                    .remove(product);
+
+            productRepository.save(product);
+            providerRepository.save(provider);
+
             return Response.ok(Messages.getInstance().getString("messages.info.item-removed"));
         } catch (Exception e) {
             e.printStackTrace();
