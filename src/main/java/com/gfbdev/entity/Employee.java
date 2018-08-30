@@ -22,4 +22,11 @@ public class Employee extends User {
         this.providerId = providerId;
     }
 
+    public enum Role{
+        MANAGER,
+        CASHIER,
+        WAITER,
+        ATENDANT
+    }
+
 }
